@@ -11,6 +11,7 @@ function Header() {
   return (
     <>
       <div id="header-container">
+        {/* header top */}
         <div id="header_btn">
           <div className="btn-cover btn-cover1 ">
             <img
@@ -65,6 +66,8 @@ function Header() {
             )}
           </div>
         </div>
+
+        {/* header bottom */}
         <div id="bg-top">
           <div className="top-container">
             <Link to="/">
@@ -74,6 +77,7 @@ function Header() {
                 alt="logo"
               />
             </Link>
+
             <div className="menubartop">
               <ul>
                 <li className="menu">
@@ -106,7 +110,7 @@ function Header() {
                     </li>
                   </ul>
                 </li>
-                <li className="menu" style={{ margin: "40px 13px" }}>
+                <li className="menu" >
                   Thành viên
                   <ul className="subMenu" style={{ marginLeft: "-20px" }}>
                     {/* <div
@@ -120,7 +124,7 @@ function Header() {
                     </li>
                   </ul>
                 </li>
-                <li className="menu" style={{ margin: "40px 50px auto 13px" }}>
+                <li className="menu" >
                   Cultureplex
                   <ul className="subMenu" style={{ marginLeft: " -20px" }}>
                     <div style={{}}></div>
