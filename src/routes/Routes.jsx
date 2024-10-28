@@ -1,6 +1,6 @@
 import { ROUTE } from '../constants/routes';
 import Layout from '../components/Layout';
-import Home from '../pages/home/Home';
+import Home from '../pages/Home/Home';
 //import Test from '../pages/Home/test';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
