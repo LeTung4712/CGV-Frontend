@@ -1,12 +1,10 @@
 import { ROUTE } from '../constants/routes';
 import Layout from '../components/Layout';
 import Home from '../pages/Home/Home';
+import DetailMovie from '../pages/Movie/DetailMovie';
 //import Test from '../pages/Home/test';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
-
-console.log(ROUTE.LAYOUT);
-console.log(ROUTE.HOME);
 
 export const routes = [
     {
@@ -15,6 +13,7 @@ export const routes = [
         isPrivate: false,
         children: [
             { path: ROUTE.HOME, element: <Home /> },
+            { path: ROUTE.MOVIE_DETAIL, element: <DetailMovie /> },
         ]
     },
     {

@@ -10,7 +10,7 @@ export const slidesData = [
         "https://iguov8nhvyobj.vcdn.cloud/media/banner/cache/1/b58515f018eb873dafa430b6f9ae0c1e/9/8/980wx448h_10_.jpg",
     },
     {
-      href: "https://www.cgv.vn/default/newsoffer/late-shift/",
+      href: "https://www.cgv.vn/default/sana-let-me-hear.html",
       imgSrc:
         "https://iguov8nhvyobj.vcdn.cloud/media/banner/cache/1/b58515f018eb873dafa430b6f9ae0c1e/9/8/980wx448h_11_.jpg",
     },

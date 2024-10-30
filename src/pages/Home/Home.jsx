@@ -14,45 +14,45 @@ import "./home.css";
 // import required modules
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
+// Import api service
+import { getMoviesNowShowing,getDetailMovie } from "../../api/movieService";
+
 export default function Home() {
   const isScreen = useMediaQuery({ query: "(max-width: 770px)" });
   const isPhone = useMediaQuery({ query: "(max-width: 600px)" });
   const [movie, setMovie] = useState([]);
 
   const navigate = useNavigate();
-  const showDetailMovie = (e) => {
-    const name = e.target.title;
-    fetch("http://localhost:3001/movie/getdetailnow", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: name }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        navigate(`/movie/${data.data.movie.title}`, { state: data.data.movie });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
+  const chooseMovie = async (e) => {
+    try {
+      const title = e.target.title;
+      //console.log('name', title);
+      const res = await getDetailMovie(title);
+      console.log('res', res);
+      navigate(`/movie/${title}`, { state: res[0] });
+    }
+    catch (error) {
+      console.log(error);
+    }
+  };
+  
   useEffect(() => {
-    fetch("http://localhost:3001/movie/now-showing")
-      .then((res) => res.json())
-      .then((data) => {
-        setMovie(data.data.moviesNowShowing);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const fetchMovies = async () => {
+      try {
+        const res = await getMoviesNowShowing();
+        console.log('movies', res);
+        setMovie(res); 
+      } catch (error) {
+        console.log(error); 
+      }
+    };
+    fetchMovies();
   }, []);
 
   return (
     <div className="main-container">
       <div className="main">
-
         {/* Section person */}
         <div className="sect-person">
           <ul>
@@ -119,7 +119,7 @@ export default function Home() {
             spaceBetween={30}
             loop={true}
             autoplay={{
-              delay: 4000, 
+              delay: 4000,
               disableOnInteraction: false,
             }}
             pagination={{
@@ -145,7 +145,29 @@ export default function Home() {
           <div className="home-title">
             <h2>movie selection</h2>
           </div>
-          
+          <Swiper
+            slidesPerView={isScreen ? (isPhone ? 2 : 3) : 4}
+            spaceBetween={15}
+            slidesPerGroup={1}
+            loop={true}
+            loopFillGroupWithBlank={true}
+            navigation={true}
+            modules={[Pagination, Navigation]}
+            className="mySwiper"
+            id="slider2"
+          >
+            {movie.map((Movie, index) => {
+              return (
+                <SwiperSlide
+                  key={index}
+                  onClick={chooseMovie}
+                  title={Movie.title}
+                >
+                  <img src={Movie.image} alt="" />
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
         </div>
 
         {/* Movie event */}
@@ -153,7 +175,6 @@ export default function Home() {
           <div className="home-title">
             <h2>event</h2>
           </div>
-          
         </div>
 
         {/* Promotion card */}
