@@ -3,6 +3,9 @@
 ## Mô Tả Dự Án
 Mục Tiêu: Xây dựng một trang web cho phép người dùng dễ dàng tìm kiếm, chọn phim, và đặt vé xem phim tại các rạp CGV.
 
+## Deploy
+Link:
+
 ## Các Tính Năng Chính
 1. Trang Chính:
 - ✅ Hiển thị danh sách phim đang chiếu và sắp chiếu.
@@ -36,7 +39,7 @@ Mục Tiêu: Xây dựng một trang web cho phép người dùng dễ dàng tì
 
 4. thêm api url vào .env
     ```js
-    REACT_APP_API_URL = 
+    VITE_API_URL = 
     ```
 ## Cấu Trúc Dự Án
 
