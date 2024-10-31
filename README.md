@@ -32,10 +32,21 @@ Link:
    ```
 2. Cài đặt các phụ thuộc:
     ```sh
+    npm install
+    ```
+    hoặc
+    ```sh
     yarn
+    ```
 3. Chạy ứng dụng 
     ```sh
+    npm run dev
+    ```
+    hoặc
+
+    ```sh
     yarn dev
+    ```
 
 4. thêm api url vào .env
     ```js

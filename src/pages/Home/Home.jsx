@@ -4,6 +4,7 @@ import Tabs from "react-bootstrap/Tabs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { slidesData } from "../../constants/slidesData";
+import VideoDialog from "../../components/Home/VideoDialog";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -15,36 +16,39 @@ import "./home.css";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
 // Import api service
-import { getMoviesNowShowing,getDetailMovie } from "../../api/movieService";
+import { getMoviesNowShowing, getDetailMovie } from "../../api/movieService";
 
 export default function Home() {
   const isScreen = useMediaQuery({ query: "(max-width: 770px)" });
   const isPhone = useMediaQuery({ query: "(max-width: 600px)" });
   const [movie, setMovie] = useState([]);
-
+  const [currentMovie, setCurrentMovie] = useState(""); // Lưu trữ bộ phim hiện tại cho trailer
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const chooseMovie = async (e) => {
-    try {
-      const title = e.target.title;
-      //console.log('name', title);
-      const res = await getDetailMovie(title);
-      console.log('res', res);
-      navigate(`/movie/${title}`, { state: res[0] });
-    }
-    catch (error) {
-      console.log(error);
-    }
+  const handleClickOpen = (movie) => {
+    setCurrentMovie(movie.trailer.replace("watch?v=", "embed/")); // Lấy link trailer từ bộ phim
+    setOpen(true); // Mở dialog
   };
-  
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const chooseMovie = (movie) => {
+    return () => {
+      navigate(`/movie/${movie.title}`, { state: movie });
+    };
+  };
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const res = await getMoviesNowShowing();
-        console.log('movies', res);
-        setMovie(res); 
+        //console.log('movies', res);
+        setMovie(res);
       } catch (error) {
-        console.log(error); 
+        console.log(error);
       }
     };
     fetchMovies();
@@ -160,10 +164,49 @@ export default function Home() {
               return (
                 <SwiperSlide
                   key={index}
-                  onClick={chooseMovie}
+                  onClick={chooseMovie(Movie)} // Chuyển đến trang chi tiết khi click vào slide
+                  className="film-lists"
                   title={Movie.title}
                 >
-                  <img src={Movie.image} alt="" />
+                  <img
+                    src={Movie.image}
+                    alt=""
+                    style={{ borderRadius: "12px" }}
+                  />
+                  <div className="play-trailer">
+                    <button
+                      type="button"
+                      className="play-trailer-btn"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Ngăn chặn sự kiện nhấp chuột từ đi lên slide
+                        handleClickOpen(Movie); // Mở dialog với thông tin đúng bộ phim
+                      }}
+                    >
+                      <span className="play-icon">►</span> {/* Icon Play */}
+                    </button>
+                  </div>
+                  <div className="feature_film_content">
+                    <h3>{Movie.name}</h3>
+
+                    <button
+                      type="button"
+                      title="Mua vé"
+                      className="button btn-booking"
+                      onClick={(e) => {
+                        //e.stopPropagation(); // Ngăn chặn sự kiện nhấp chuột từ đi lên slide
+                        chooseMovie(Movie); // Chuyển đến trang chi tiết
+                      }}
+                    >
+                      <span>
+                        <span>Mua vé ngay</span>
+                      </span>
+                    </button>
+                  </div>
+                  <VideoDialog
+                    open={open}
+                    handleClose={handleClose}
+                    trailer={currentMovie} 
+                  />
                 </SwiperSlide>
               );
             })}
