@@ -1,12 +1,13 @@
 @media only screen and (min-width: 771px) {
     .page-chitiet {
-        width: 980px;
+        width: 1230px;
     }
 }
 
 .page-chitiet {
     margin: 0 auto;
     margin-top: 30px;
+    backdrop-filter: blur(6px); 
 }
 
 .page-chitiet {
@@ -58,7 +59,7 @@ h1 {
 
 @media only screen and (min-width: 771px) {
     .page-chitiet .product-view .product-img-box {
-        width: 20%;
+        width: 30%;
     }
 }
 
@@ -108,7 +109,7 @@ h1 {
 
 @media only screen and (min-width: 771px) {
     .page-chitiet .product-view .product-shop {
-        width: 80%;
+        width: 70%;
     }
 }
 

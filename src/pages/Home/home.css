@@ -357,6 +357,7 @@ body {
 .home-title {
     background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg_h3_line.jpg) repeat-x scroll 0 26px rgba(0, 0, 0, 0);
     height: 60px;
+    margin-bottom: 20px;
     text-align: center;
     width: 100%;
 
@@ -410,6 +411,57 @@ body {
     object-fit: unset;
 
 }
+
+
+
+  .film-lists {
+    position: relative;
+    overflow: hidden;
+  }
+  .play-trailer {
+    position: absolute; /* Đặt vị trí tuyệt đối */
+    top: 50%; /* Đặt vị trí từ trên xuống */
+    left: 50%; /* Đặt vị trí từ bên trái */
+    transform: translate(-50%, -50%); /* Căn giữa theo cả chiều ngang và chiều dọc */
+    opacity: 0; /* Ban đầu ẩn đi */
+    transition: opacity 0.3s ease; /* Hiệu ứng chuyển tiếp khi hover */
+  }
+  .feature_film_content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    opacity: 0; /* Bắt đầu với độ mờ 0 */
+    transition: opacity 0.3s ease; /* Hiệu ứng mờ khi chuyển */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa nội dung */
+  }
+  .film-lists:hover .play-trailer,
+  .film-lists:hover .feature_film_content {
+    opacity: 1; /* Hiển thị lớp phủ */
+  }
+  
+  .play-trailer-btn {
+    background-color: rgba(255, 255, 255, 0.7); /* Nền trong suốt */
+    border: none; /* Bỏ viền */
+    border-radius: 50%; /* Hình tròn */
+    width: 50px; /* Kích thước */
+    height: 50px; /* Kích thước */
+    display: flex; /* Để sử dụng flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    cursor: pointer; /* Con trỏ chuột */
+  }
+  
+  .play-icon {
+    font-size: 24px; /* Kích thước icon */
+    color: black; /* Màu sắc icon */
+  }
+
 
 /* event */
 .cms-home .home-event {
