@@ -1,0 +1,40 @@
+.home-promotion-card {
+  margin-bottom: 40px;
+}
+
+.promos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.format-border {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.format-border:hover {
+  transform: translateY(-5px);
+}
+
+.format-border img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .promos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .promos {
+    grid-template-columns: 1fr;
+  }
+} 

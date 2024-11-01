@@ -1,0 +1,27 @@
+.sect-person {
+  margin-bottom: 20px;
+}
+
+.sect-person ul {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+}
+
+.sect-person ul li a {
+  display: block;
+  padding: 8px 15px;
+  text-decoration: none;
+  color: #333;
+  border-radius: 4px;
+  background: #f5f5f5;
+  transition: all 0.3s ease;
+}
+
+.sect-person ul li a:hover {
+  background: #e31221;
+  color: white;
+} 

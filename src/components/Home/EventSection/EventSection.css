@@ -1,0 +1,14 @@
+.home-event {
+  margin-bottom: 40px;
+}
+
+.home-event .home-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.home-event .home-title h2 {
+  font-size: 24px;
+  color: #333;
+  text-transform: uppercase;
+} 
