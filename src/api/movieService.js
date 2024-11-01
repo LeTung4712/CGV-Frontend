@@ -21,10 +21,19 @@ export const getMoviesComingSoon = async () => {
 
 export const getDetailMovie = async (title) => {
     try {
-        const response = await apiClient.get(`${PREFIX}/getdetailmovie?title=${title}`);
+        const response = await apiClient.get(`${PREFIX}/detailmovie?title=${title}`);
         return response.data; 
     } catch (error) {
         throw error; 
     }
 };
+
+export const getMovieShowtimes = async (movieId, date) => {
+    try {
+      const response = await apiClient.get(`${PREFIX}/showtimes?movieId=${movieId}&date=${date}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
     
