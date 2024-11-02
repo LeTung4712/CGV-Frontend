@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { getMovieShowtimes } from '../../../api/movieService';
 import MovieCalendar from './MovieCalendar';
 import ShowtimeList from './ShowtimeList';
 
-function ShowtimeSchedule({ movieId }) {
+function ShowtimeSchedule({ movieData }) {
   const now = dayjs();
   const [selectedDate, setSelectedDate] = useState(now);
   const [currentTime] = useState(now.format('HH:mm'));
@@ -20,24 +20,35 @@ function ShowtimeSchedule({ movieId }) {
       setLoading(true);
       setError(null);
       const formattedDate = date.format('YYYY-MM-DD');
-      const response = await getMovieShowtimes(movieId, formattedDate);
+      const response = await getMovieShowtimes(movieData.idmovies, formattedDate);
       
-      const filteredShowtimes = response.data.movieTypes.map(type => ({
-        ...type,
-        cinemas: type.cinemas.map(cinema => ({
-          ...cinema,
-          showtimes: cinema.showtimes.filter(showtime => {
+      const formattedShowtimes = response[0].cinemas.map(cinema => ({
+        idcinemas: cinema.idcinemas,
+        name: cinema.name,
+        address: cinema.address,
+        hall: cinema.hall.map(hall => ({
+          idhalls: hall.idhalls,
+          name: hall.name,
+          showtimes: hall.showtimes.filter(showtime => {
             if (date.isSame(now, 'day')) {
-              return showtime.time > currentTime;
+              return showtime.start_time > currentTime;
             }
             return true;
-          })
-        })).filter(cinema => cinema.showtimes.length > 0)
-      })).filter(type => type.cinemas.length > 0);
+          }).map(showtime => ({
+            idshowtimes: showtime.idshowtimes,
+            start_time: showtime.start_time,
+            end_time: showtime.end_time,
+            seatsAvailable: showtime.seatsAvailable,
+            isAlmostFull: showtime.isAlmostFull,
+            isSoldOut: showtime.isSoldOut
+          }))
+        })).filter(hall => hall.showtimes.length > 0)
+      })).filter(cinema => cinema.hall.length > 0);
 
-      setShowtimes(filteredShowtimes);
+      console.log('day la formattedShowtimes',formattedShowtimes);
+      setShowtimes(formattedShowtimes);
     } catch (err) {
-      setError('Không thể tải lịch chiếu. Vui lòng thử lại sau.');
+      setError('Không có suất chiếu nào. Vui lòng chọn ngày khác.');
       setShowtimes([]);
       console.error(err);
     } finally {
@@ -47,32 +58,30 @@ function ShowtimeSchedule({ movieId }) {
 
   useEffect(() => {
     fetchShowtimes(selectedDate);
-  }, [selectedDate, movieId]);
+  }, [selectedDate, movieData.idmovies]);
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
   };
 
-  const handleTimeSelect = (movieType, cinema, showtime) => {
+  const handleTimeSelect = (cinema, hall, showtime) => {
     if (showtime.isSoldOut) return;
     
     navigate('/booking', {
       state: {
-        movieId,
-        movieType: {
-          id: movieType.id,
-          name: movieType.name,
-          price: movieType.price
-        },
+        movieId: movieData.idmovies,
         cinema: {
-          id: cinema.id,
+          id: cinema.idcinemas,
           name: cinema.name,
           address: cinema.address
         },
+        hall: {
+          id: hall.idhalls,
+          name: hall.name
+        },
         showtime: {
-          id: showtime.id,
-          time: showtime.time,
-          room: showtime.room,
+          id: showtime.idshowtimes,
+          time: showtime.start_time,
           date: selectedDate.format('YYYY-MM-DD')
         }
       }
@@ -83,29 +92,53 @@ function ShowtimeSchedule({ movieId }) {
     <Box 
       id="showtimes-section"
       sx={{ 
-        display: 'flex', 
-        gap: 3,
-        p: 3,
-        scrollMarginTop: '80px',
-        '& > :first-of-type': { flex: '0 0 70%' },
-        '& > :last-child': { 
-          flex: '0 0 28%',
-          mr: 2
-        }
+        backgroundColor: '#fff',
+        borderRadius: 2,
+        boxShadow: 1,
+        mt: 3,
+        mb: 3,
       }}
     >
-      <ShowtimeList
-        loading={loading}
-        error={error}
-        showtimes={showtimes}
-        selectedDate={selectedDate}
-        currentTime={currentTime}
-        onTimeSelect={handleTimeSelect}
-      />
-      <MovieCalendar
-        selectedDate={selectedDate}
-        onDateSelect={handleDateSelect}
-      />
+      <Typography
+        variant="h5"
+        sx={{
+          p: 2,
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          fontWeight: 'bold',
+          color: 'primary.main'
+        }}
+      >
+        Lịch Chiếu
+      </Typography>
+
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          gap: 3,
+          p: 3,
+          scrollMarginTop: '80px',
+          flexDirection: { xs: 'column-reverse', md: 'row' },
+          '& > :first-of-type': { 
+            flex: { xs: '1 1 auto', md: '0 0 70%' }
+          },
+          '& > :last-child': { 
+            flex: { xs: '1 1 auto', md: '0 0 28%' }
+          }
+        }}
+      >
+        <ShowtimeList
+          loading={loading}
+          error={error}
+          showtimes={showtimes}
+          selectedDate={selectedDate}
+          onTimeSelect={handleTimeSelect}
+        />
+        <MovieCalendar
+          selectedDate={selectedDate}
+          onDateSelect={handleDateSelect}
+        />
+      </Box>
     </Box>
   );
 }

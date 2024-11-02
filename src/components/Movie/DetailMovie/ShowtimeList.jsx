@@ -6,9 +6,9 @@ import {
   Paper, 
   CircularProgress, 
   Alert, 
-  Chip, 
   Divider,
-  styled 
+  styled,
+  Grid
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
@@ -70,58 +70,55 @@ function ShowtimeList({
         height: 'fit-content'
       }
     }}>
-      {showtimes.map((type) => (
-        <Paper key={type.id} sx={{ mb: 3, p: 2 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h6" sx={{ color: 'primary.main' }}>
-              {type.name}
+      {showtimes.map((cinema) => (
+        <Paper key={cinema.idcinemas} sx={{ mb: 3, p: 2 }}>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ color: 'primary.main', mb: 1 }}>
+              {cinema.name}
             </Typography>
-            <Chip 
-              label={`${type.price.toLocaleString('vi-VN')}đ`}
-              color="primary"
-              variant="outlined"
-            />
+            <Typography 
+              variant="body2" 
+              sx={{ display: 'flex', alignItems: 'center', color: 'text.secondary' }}
+            >
+              <LocationOnIcon sx={{ fontSize: 16, mr: 0.5 }} />
+              {cinema.address}
+            </Typography>
           </Box>
           
           <Divider sx={{ mb: 2 }} />
           
-          {type.cinemas.map((cinema) => (
-            <Box key={cinema.id} sx={{ mb: 3 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                {cinema.name}
-              </Typography>
-              <Typography 
-                variant="body2" 
-                sx={{ mb: 1.5, display: 'flex', alignItems: 'center', color: 'text.secondary' }}
-              >
-                <LocationOnIcon sx={{ fontSize: 16, mr: 0.5 }} />
-                {cinema.address}
+          {cinema.hall.map((hall) => (
+            <Box key={hall.idhalls} sx={{ mb: 3 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1.5 }}>
+                {hall.name}
               </Typography>
               
-              <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                {cinema.showtimes.map((showtime) => (
-                  <ShowtimeButton
-                    key={showtime.id}
-                    variant="outlined"
-                    onClick={() => onTimeSelect(type, cinema, showtime)}
-                    disabled={showtime.isSoldOut}
-                    almostfull={showtime.isAlmostFull ? 1 : 0}
-                    soldout={showtime.isSoldOut ? 1 : 0}
-                  >
-                    <Box sx={{ textAlign: 'center' }}>
-                      <Typography variant="body1">{showtime.time}</Typography>
-                      <Typography className="seats-info">
-                        <EventSeatIcon sx={{ fontSize: 12, mr: 0.5 }} />
-                        {showtime.isSoldOut 
-                          ? 'Hết vé' 
-                          : showtime.isAlmostFull 
-                            ? 'Sắp hết' 
-                            : `${showtime.seatsAvailable} ghế`}
-                      </Typography>
-                    </Box>
-                  </ShowtimeButton>
+              <Grid container spacing={1}>
+                {hall.showtimes.map((showtime) => (
+                  <Grid item xs={6} md={3} key={showtime.idshowtimes}>
+                    <ShowtimeButton
+                      fullWidth
+                      variant="outlined"
+                      onClick={() => onTimeSelect(cinema, hall, showtime)}
+                      disabled={showtime.isSoldOut}
+                      almostfull={showtime.isAlmostFull ? 1 : 0}
+                      soldout={showtime.isSoldOut ? 1 : 0}
+                    >
+                      <Box sx={{ textAlign: 'center' }}>
+                        <Typography variant="body1">{showtime.start_time}</Typography>
+                        <Typography className="seats-info">
+                          <EventSeatIcon sx={{ fontSize: 12, mr: 0.5 }} />
+                          {showtime.isSoldOut 
+                            ? 'Hết vé' 
+                            : showtime.isAlmostFull 
+                              ? 'Sắp hết' 
+                              : `${showtime.seatsAvailable} ghế`}
+                        </Typography>
+                      </Box>
+                    </ShowtimeButton>
+                  </Grid>
                 ))}
-              </Box>
+              </Grid>
             </Box>
           ))}
         </Paper>

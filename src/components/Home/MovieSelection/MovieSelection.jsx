@@ -68,10 +68,10 @@ export default function MovieSelection({ movies }) {
           }}
         >
           {movies.map((movie) => (
-            <SwiperSlide key={movie.id}>
+            <SwiperSlide key={movie.idmovies}>
               <div className="movie-card" onClick={() => handleMovieClick(movie)}>
                 <div className="movie-poster">
-                  <img src={movie.image} alt={movie.title} />
+                  <img src={movie.image_url} alt={movie.title} />
                   <div className="movie-overlay">
                     <button
                       type="button"
