@@ -30,7 +30,7 @@ export const getDetailMovie = async (title) => {
 
 export const getMovieShowtimes = async (movieId, date) => {
     try {
-      const response = await apiClient.get(`${PREFIX}/showtimes?movieId=${movieId}&date=${date}`);
+      const response = await apiClient.get(`${PREFIX}/showtimes?idmovies=${movieId}&date=${date}`);
       return response.data;
     } catch (error) {
       throw error;

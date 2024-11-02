@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Box, 
   Typography, 
@@ -17,6 +17,7 @@ import StarIcon from '@mui/icons-material/Star';
 import PersonIcon from '@mui/icons-material/Person';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import LanguageIcon from '@mui/icons-material/Language';
 
 const MoviePoster = styled('img')(({ theme }) => ({
   width: '100%',
@@ -98,6 +99,8 @@ const BookingButton = styled(Button)(({ theme }) => ({
 }));
 
 function MovieInfo({ movieData }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const videoUrl = movieData.trailer?.replace("watch?v=", "embed/");
 
   const scrollToShowtimes = () => {
@@ -133,7 +136,7 @@ function MovieInfo({ movieData }) {
                 px: { xs: 1, md: 2 }
               }}>
                 <MoviePoster 
-                  src={movieData.image} 
+                  src={movieData.image_url} 
                   alt={movieData.name}
                   loading="lazy"
                 />
@@ -155,9 +158,58 @@ function MovieInfo({ movieData }) {
                   {movieData.name}
                 </Typography>
 
-                <MovieDetail sx={{ mb: 3 }}>
-                  {movieData.detail}
-                </MovieDetail>
+                <Box sx={{ position: 'relative' }}>
+                  <MovieDetail 
+                    sx={{ 
+                      mb: 3,
+                      maxHeight: { 
+                        xs: isExpanded ? 'none' : '100px',
+                        md: 'none' 
+                      },
+                      overflow: { 
+                        xs: 'hidden',
+                        md: 'visible' 
+                      },
+                      position: 'relative'
+                    }}
+                  >
+                    {movieData.description}
+                  </MovieDetail>
+
+                  <Box
+                    sx={{
+                      display: { xs: 'block', md: 'none' },
+                      textAlign: 'center',
+                      mt: 1,
+                      mb: 2,
+                      // Gradient overlay khi chưa expand
+                      ...((!isExpanded) && {
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: '100%',
+                          left: 0,
+                          right: 0,
+                          height: '50px',
+                          background: 'linear-gradient(transparent, rgba(255,255,255,0.8))'
+                        }
+                      })
+                    }}
+                  >
+                    <Button
+                      onClick={() => setIsExpanded(!isExpanded)}
+                      sx={{
+                        color: 'primary.main',
+                        textTransform: 'none',
+                        '&:hover': {
+                          backgroundColor: 'rgba(0,0,0,0.04)'
+                        }
+                      }}
+                    >
+                      {isExpanded ? 'Thu gọn' : 'Xem thêm'}
+                    </Button>
+                  </Box>
+                </Box>
 
                 <Divider sx={{ my: 3, opacity: 0.6 }} />
 
@@ -169,14 +221,14 @@ function MovieInfo({ movieData }) {
                 }}>
                   <Chip 
                     icon={<StarIcon />} 
-                    label={`Rated: ${movieData.rated}`} 
+                    label={`Phân loại: ${movieData.rated}`} 
                     color="primary" 
                     variant="outlined"
                     sx={{ borderWidth: 2 }}
                   />
                   <Chip 
                     icon={<AccessTimeIcon />} 
-                    label={`${movieData.time} phút`}
+                    label={`${movieData.duration} phút`}
                     variant="outlined"
                     sx={{ borderWidth: 2 }}
                   />
@@ -187,21 +239,21 @@ function MovieInfo({ movieData }) {
                     <InfoItem>
                       <CalendarMonthIcon />
                       <Typography>
-                        <strong>Khởi chiếu:</strong> {movieData.timeStart}
+                        <strong>Khởi chiếu:</strong> {movieData.release_date}
                       </Typography>
                     </InfoItem>
 
                     <InfoItem>
                       <CategoryIcon />
                       <Typography>
-                        <strong>Thể loại:</strong> {movieData.category}
+                        <strong>Thể loại:</strong> {movieData.genre}
                       </Typography>
                     </InfoItem>
 
                     <InfoItem>
                       <PersonIcon />
                       <Typography>
-                        <strong>Đạo diễn:</strong> {movieData.directors}
+                        <strong>Đạo diễn:</strong> {movieData.director}
                       </Typography>
                     </InfoItem>
 
@@ -209,6 +261,13 @@ function MovieInfo({ movieData }) {
                       <TheatersIcon />
                       <Typography>
                         <strong>Diễn viên:</strong> {movieData.actor}
+                      </Typography>
+                    </InfoItem>
+
+                    <InfoItem>
+                      <LanguageIcon />
+                      <Typography>
+                        <strong>Ngôn ngữ:</strong> {movieData.language}
                       </Typography>
                     </InfoItem>
                   </Grid>
