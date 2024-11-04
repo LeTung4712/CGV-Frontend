@@ -28,9 +28,9 @@ export const getDetailMovie = async (title) => {
     }
 };
 
-export const getMovieShowtimes = async (movieId, date) => {
+export const getMovieShowtimes = async (movieId, location, date) => {
     try {
-      const response = await apiClient.get(`${PREFIX}/showtimes?idmovies=${movieId}&date=${date}`);
+      const response = await apiClient.get(`${PREFIX}/showtimes?idmovies=${movieId}&location=${location}&date=${date}`);
       return response.data;
     } catch (error) {
       throw error;
