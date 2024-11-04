@@ -20,13 +20,17 @@ function ShowtimeSchedule({ movieData }) {
       setLoading(true);
       setError(null);
       const formattedDate = date.format('YYYY-MM-DD');
+
+      // delay 2s
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       const response = await getMovieShowtimes(movieData.idmovies, formattedDate);
       
       const formattedShowtimes = response[0].cinemas.map(cinema => ({
         idcinemas: cinema.idcinemas,
         name: cinema.name,
         address: cinema.address,
-        hall: cinema.hall.map(hall => ({
+        hall: cinema.halls.map(hall => ({
           idhalls: hall.idhalls,
           name: hall.name,
           showtimes: hall.showtimes.filter(showtime => {
@@ -62,14 +66,15 @@ function ShowtimeSchedule({ movieData }) {
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
+    setLoading(true);
   };
 
   const handleTimeSelect = (cinema, hall, showtime) => {
     if (showtime.isSoldOut) return;
     
-    navigate('/booking', {
+    navigate('/ticket', {
       state: {
-        movieId: movieData.idmovies,
+        movie: movieData,
         cinema: {
           id: cinema.idcinemas,
           name: cinema.name,

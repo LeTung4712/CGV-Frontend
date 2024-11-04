@@ -2,9 +2,11 @@ import { ROUTE } from "../constants/routes";
 import Layout from "../components/Layout";
 import Home from "../pages/Home/Home";
 import DetailMovie from "../pages/Movie/DetailMovie";
+import Ticket from "../pages/Movie/Ticket";
 //import Test from '../pages/Home/test';
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
+
 
 export const routes = [
   {
@@ -14,13 +16,16 @@ export const routes = [
     children: [
       { path: ROUTE.HOME, element: <Home /> },
       { path: ROUTE.MOVIE_DETAIL, element: <DetailMovie /> },
+      { path: ROUTE.TICKET, element: <Ticket /> },
     ],
   },
   {
     path: ROUTE.LAYOUT,
     element: <Layout />,
     isPrivate: true,
-    children: [],
+    children: [
+
+    ],
   },
 ].map((route) => {
   if (route.isPrivate) {
