@@ -36,4 +36,12 @@ export const getMovieShowtimes = async (movieId, date) => {
       throw error;
     }
   };
-    
+
+export const getSeatStatus = async (showtimeId) => {
+    try {
+        const response = await apiClient.get(`${PREFIX}/seatstatus?idshowtimes=${showtimeId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

@@ -39,8 +39,17 @@ function ShowtimeList({
 }) {
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '200px',
+        p: 3 
+      }}>
         <CircularProgress />
+        <Typography sx={{ ml: 2 }}>
+          Đang tải lịch chiếu...
+        </Typography>
       </Box>
     );
   }
