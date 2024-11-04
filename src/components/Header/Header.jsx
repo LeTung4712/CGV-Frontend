@@ -1,183 +1,453 @@
-import "./header.css";
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { BsJustify } from "react-icons/bs"
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Button,
+  MenuItem,
+  Stack,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemButton,
+  Collapse,
+  useScrollTrigger,
+  Select,
+  FormControl,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Grid,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import logo from '../../assets/cgvlogo.png';
+import { useLocation } from '../../contexts/LocationContext';
+
+const navigation = {
+  main: [
+    {
+      title: 'LỊCH CHIẾU',
+      children: [
+        { title: 'LỊCH CHIẾU PHIM', path: '/movies/now-showing' },
+        { title: 'LỊCH CHIẾU RẠP', path: '/cinemas' }
+      ]
+    },
+    { title: 'ĐỒ ĂN/COMBO', path: '/food-drinks' },
+    { title: 'KHUYẾN MÃI', path: '/promotions' },
+    {
+      title: 'VỀ CHÚNG TÔI',
+      children: [
+        { title: 'HỆ THỐNG RẠP', path: '/theaters' },
+        { title: 'VỀ CHÚNG TÔI', path: '/about' },
+        { title: 'DỊCH VỤ QUẢNG CÁO', path: '/advertising' },
+        { title: 'TUYỂN DỤNG', path: '/recruitment' }
+      ]
+    }
+  ]
+};
+
+const locations = [
+  { value: 'hanoi', label: 'Hà Nội' },
+  { value: 'hochiminh', label: 'TP. Hồ Chí Minh' },
+  { value: 'danang', label: 'Đà Nẵng' }
+];
+
+const styles = {
+  navigationButton: {
+    color: 'text.primary',
+    mx: 1,
+    fontSize: '16px',
+    fontWeight: 600,
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    letterSpacing: '0.5px',
+    '&:hover': { backgroundColor: 'transparent' }
+  },
+  select: (isMobile) => ({
+    backgroundColor: '#fdfcf0',
+    '& .MuiSelect-select': {
+      py: 1,
+      fontSize: isMobile ? '14px' : '16px',
+      fontWeight: 600,
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      letterSpacing: '0.5px'
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#0066cc',
+      borderWidth: '2px'
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#0066cc'
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#0066cc'
+    }
+  }),
+  menuItem: {
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    fontSize: '16px',
+    fontWeight: 600,
+    letterSpacing: '0.5px'
+  }
+};
+
 function Header() {
+  const { location, updateLocation } = useLocation();
   const user = JSON.parse(localStorage.getItem("token"));
   const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState('');
+  const [openLocationDialog, setOpenLocationDialog] = useState(false);
+
+  useEffect(() => {
+    const savedLocation = localStorage.getItem('location');
+    if (!savedLocation) {
+      setOpenLocationDialog(true);
+    }
+  }, []);
+
+  const handleLocationChange = (event) => {
+    const newLocation = event.target.value;
+    if (locations.some(loc => loc.value === newLocation)) {
+      updateLocation(newLocation);
+    }
+  };
+
+  const handleLocationSelect = (selectedLocation) => {
+    updateLocation(selectedLocation);
+    setOpenLocationDialog(false);
+  };
+
+  // Thêm effect cho shadow khi scroll
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 0,
+  });
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const handleSubmenuClick = (title) => {
+    setOpenSubmenu(openSubmenu === title ? '' : title);
+  };
+
   const logoutOnclick = () => {
     localStorage.removeItem("token");
     navigate("/logout");
   };
+
+  // Location Selector Component
+  const LocationSelector = React.memo(({ isMobile }) => (
+    <FormControl sx={{ minWidth: isMobile ? 100 : 120, mr: 2 }}>
+      <Select
+        value={location}
+        onChange={handleLocationChange}
+        size="small"
+        sx={styles.select(isMobile)}
+      >
+        {locations.map((loc) => (
+          <MenuItem key={loc.value} value={loc.value}>
+            {loc.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  ));
+
   return (
     <>
-      <div id="header-container">
-        {/* header top */}
-        <div id="header_btn">
-          <div className="btn-cover btn-cover1 ">
-            <img
-              className="icon"
-              src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/recruitment_icon1.png"
-              alt="icon"
-            />
-
-            <a id="btn-zoom" href="https://www.facebook.com/">
-              Tuyển dụng
-            </a>
-          </div>
-          <div className="btn-cover btn-cover1">
-            <img
-              className="icon"
-              src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/icon_promotion25.png"
-              alt="icon"
-            />
-            <a id="btn-zoom" href="https://www.facebook.com/">
-              Tin mới và ưu đãi
-            </a>
-          </div>
-          <div className="btn-cover btn-cover1">
-            <img
-              className="icon"
-              src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/icon_ticket25.png"
-              alt="icon"
-            />
-            <a id="btn-zoom" href="https://www.facebook.com/">
-              Vé của tôi
-            </a>
-          </div>
-          <div className="btn-cover ">
-            <img
-              className="icon"
-              src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/icon_login25.png"
-              alt="icon"
-            />
-            {!user ? (
-              <Link to="/login">Đăng nhập/Đăng ký</Link>
-            ) : (
-              <>
-                <Link to="/profile/general">Xin chào, {user.user.name}</Link>
-                <Link
-                  to="/logout"
-                  onClick={logoutOnclick}
-                  style={{ marginLeft: "20px" }}
-                >
-                  Thoát
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar 
+          position="sticky"
+          color="default"
+          sx={{
+            top: 0,
+            backgroundColor: '#fdfcf0',
+            boxShadow: trigger ? 1 : 0,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+        >
+          <Container maxWidth="xl">
+            <Toolbar 
+              disableGutters 
+              sx={{ 
+                minHeight: { xs: '56px', sm: '64px' },
+              }}
+            >
+              {/* Logo */}
+              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <Link to="/">
+                  <img src={logo} alt="Logo" style={{ height: '40px' }} />
                 </Link>
-              </>
-            )}
-          </div>
-        </div>
+              </Box>
 
-        {/* header bottom */}
-        <div id="bg-top">
-          <div className="top-container">
-            <Link to="/">
-              <img
-                className="logo"
-                src="https://www.cgv.vn/skin/frontend/cgv/default/images/cgvlogo.png"
-                alt="logo"
-              />
-            </Link>
+              {/* Desktop Menu - Điều chỉnh justifyContent thành flex-start */}
+              <Box sx={{ 
+                flexGrow: 1, 
+                display: { xs: 'none', md: 'flex' },
+                justifyContent: 'flex-start',
+                ml: 4 // Thêm margin left để tạo khoảng cách với logo
+              }}>
+                {navigation.main.map((item) => (
+                  item.children ? (
+                    <Box
+                      key={item.title}
+                      sx={{ 
+                        position: 'relative',
+                        '&:hover > .MuiBox-root': { // Thay đổi selector
+                          display: 'block'
+                        },
+                        mx: 1
+                      }}
+                    >
+                      <Button
+                        sx={styles.navigationButton}
+                      >
+                        {item.title}
+                      </Button>
+                      {/* Thay Menu bằng Box cho dropdown */}
+                      <Box
+                        sx={{
+                          display: 'none',
+                          position: 'absolute',
+                          top: '100%',
+                          left: 0,
+                          minWidth: '200px',
+                          backgroundColor: '#fdfcf0',
+                          boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                          zIndex: 1000
+                        }}
+                      >
+                        {item.children.map((child) => (
+                          <Button
+                            key={child.title}
+                            component={Link}
+                            to={child.path}
+                            fullWidth
+                            sx={{
+                              justifyContent: 'flex-start',
+                              padding: '8px 16px',
+                              textAlign: 'left',
+                              color: 'text.primary',
+                              '&:hover': { 
+                                backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                              }
+                            }}
+                          >
+                            {child.title}
+                          </Button>
+                        ))}
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Button
+                      key={item.title}
+                      component={Link}
+                      to={item.path}
+                      sx={styles.navigationButton}
+                    >
+                      {item.title}
+                    </Button>
+                  )
+                ))}
+              </Box>
 
-            <div className="menubartop">
-              <ul>
-                <li className="menu">
-                  Phim
-                  <ul className="subMenu">
-                    <li>
-                      <Link to="/movies/now-showing">Phim Đang Chiếu</Link>
-                    </li>
-                    <li>
-                      <Link to="/movies/coming-soon">Phim Sắp Chiếu</Link>
-                    </li>
-                  </ul>
-                </li>
-                <li className="menu">
-                  Rạp cgv
-                  <ul
-                    className="subMenu"
-                    style={{
-                      marginLeft: " -10px",
-                    }}
+              {/* Mobile Menu */}
+              <Box sx={{ 
+                display: { xs: 'flex', md: 'none' },
+                alignItems: 'center',
+                flexGrow: 1 
+              }}>
+                <IconButton
+                  onClick={handleDrawerToggle}
+                  sx={{ mr: 2 }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Link to="/">
+                  <img src={logo} alt="Logo" style={{ height: '30px' }} />
+                </Link>
+                <Box sx={{ flexGrow: 1 }} /> {/* Spacer */}
+                <LocationSelector isMobile />
+              </Box>
+
+              {/* Login/Register Button và Location Selector cho Desktop */}
+              <Box sx={{ 
+                flexShrink: 0,
+                display: { xs: 'none', md: 'flex' }, // Ẩn trên mobile
+                alignItems: 'center'
+              }}>
+                <LocationSelector />
+
+                {/* Login/Register buttons */}
+                {!user ? (
+                  <Button
+                    component={Link}
+                    to="/login"
+                    sx={styles.navigationButton}
                   >
-                    <li>
-                      <Link to="/cinema">Tất cả các rạp</Link>
-                    </li>
-                    <li>
-                      <a href=""> Rạp Đặc Biệt</a>
-                    </li>
-                    <li>
-                      <a href=""> Rạp 3D</a>
-                    </li>
-                  </ul>
-                </li>
-                <li className="menu" >
-                  Thành viên
-                  <ul className="subMenu" style={{ marginLeft: "-20px" }}>
-                    {/* <div
-                      style={{ position: "absolute", border: "2px solid #fff" }}
-                    ></div> */}
-                    <li>
-                      <a href=""> Tài khoản CGV</a>
-                    </li>
-                    <li>
-                      <a href=""> Quyền Lợi</a>
-                    </li>
-                  </ul>
-                </li>
-                <li className="menu" >
-                  Cultureplex
-                  <ul className="subMenu" style={{ marginLeft: " -20px" }}>
-                    <div style={{}}></div>
-                    <li>
-                      <a href=""> Quầy Online</a>
-                    </li>
-                    <li>
-                      <a href=""> Thuê Rạp và Vé Nhóm</a>
-                    </li>
-                    <li>
-                      <a href=""> E-CGV</a>
-                    </li>
-                    <li>
-                      <a href=""> Thẻ Quà Tặng</a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
+                    ĐĂNG NHẬP/ĐĂNG KÝ
+                  </Button>
+                ) : (
+                  <Stack 
+                    direction="row" 
+                    spacing={1}
+                    sx={{ display: { xs: 'none', md: 'flex' } }} // Ẩn trên mobile
+                  >
+                    <Button
+                      component={Link}
+                      to="/profile"
+                      sx={{ color: 'text.primary' }}
+                    >
+                      XIN CHÀO, {user.user.name}
+                    </Button>
+                    <Button
+                      onClick={logoutOnclick}
+                      sx={{ color: 'text.primary' }}
+                    >
+                      THOÁT
+                    </Button>
+                  </Stack>
+                )}
+              </Box>
 
+              {/* Thêm Login/Register cho Mobile */}
+              <Box sx={{ 
+                display: { xs: 'flex', md: 'none' },
+                alignItems: 'center'
+              }}>
+                {!user ? (
+                  <Button
+                    component={Link}
+                    to="/login"
+                    sx={styles.navigationButton}
+                  >
+                    ĐĂNG NHẬP
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={logoutOnclick}
+                    sx={styles.navigationButton}
+                  >
+                    THOÁT
+                  </Button>
+                )}
+              </Box>
+            </Toolbar>
+          </Container>
 
-            <img
-              id="kenhCine"
-              src="https://www.cgv.vn/media/wysiwyg/2019/AUG/kenhcine.gif"
-              alt="kênh cine"
-            />
-            <img
-              id="muaVe"
-              src="https://www.cgv.vn/media/wysiwyg/news-offers/mua-ve_ngay.png"
-              alt="mua vé"
-            />
-          </div>
-        </div>
+          {/* Mobile Drawer */}
+          <Drawer
+            anchor="left"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            sx={{
+              display: { xs: 'block', md: 'none' },
+              '& .MuiDrawer-paper': { 
+                boxSizing: 'border-box', 
+                width: 240,
+                backgroundColor: '#fdfcf0'
+              },
+            }}
+          >
+            <List sx={{ pt: 2 }}>
+              {navigation.main.map((item) => (
+                item.children ? (
+                  <React.Fragment key={item.title}>
+                    <ListItemButton onClick={() => handleSubmenuClick(item.title)}>
+                      <ListItemText primary={item.title} />
+                      {openSubmenu === item.title ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={openSubmenu === item.title} timeout="auto">
+                      <List component="div" disablePadding>
+                        {item.children.map((child) => (
+                          <ListItemButton
+                            key={child.title}
+                            component={Link}
+                            to={child.path}
+                            sx={{ pl: 4 }}
+                            onClick={handleDrawerToggle}
+                          >
+                            <ListItemText primary={child.title} />
+                          </ListItemButton>
+                        ))}
+                      </List>
+                    </Collapse>
+                  </React.Fragment>
+                ) : (
+                  <ListItemButton
+                    key={item.title}
+                    component={Link}
+                    to={item.path}
+                    onClick={handleDrawerToggle}
+                  >
+                    <ListItemText primary={item.title} />
+                  </ListItemButton>
+                )
+              ))}
+            </List>
+          </Drawer>
+        </AppBar>
+      </Box>
 
-        <div className="dropdown">
-          <button id="btn-menu" data-bs-toggle="dropdown" aria-expanded="false">
-            <BsJustify /> Menu
-          </button>
-          <button id="btn-tiket">
-            <span className="icon"><a href="https://www.cgv.vn/default/sales/order/history/"></a></span>
-          </button>
-          <ul className="dropdown-menu">
-            <li><Link to="/movies/now-showing">PHIM ĐANG CHIẾU</Link></li>
-            <li><Link to="/movies/coming-soon">PHIM SẮP CHIẾU</Link></li>
-            <li><Link to="/cinema">RẠP CGV</Link></li>
-            <li><a href=""> THÀNH VIÊN</a></li>
-            <li><a href=""> CULTUREPLEX</a></li>
-            <li><a href=""> TUYỂN DỤNG</a></li>
-            <li><a href=""> TIN MỚI VÀ ƯU ĐÃI</a></li>
-          </ul>
-        </div>
-
-      </div>
+      {/* Dialog chọn vị trí */}
+      <Dialog
+        open={openLocationDialog}
+        maxWidth="sm"
+        fullWidth
+        sx={{
+          '& .MuiDialog-paper': {
+            backgroundColor: '#fdfcf0',
+          }
+        }}
+      >
+        <DialogTitle 
+          sx={{ 
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '1.5rem',
+            color: '#333'
+          }}
+        >
+          Chọn Vị Trí Của Bạn
+        </DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            {locations.map((location) => (
+              <Grid item xs={12} sm={6} key={location.value}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => handleLocationSelect(location.value)}
+                  sx={{
+                    py: 2,
+                    borderColor: '#0066cc',
+                    color: '#0066cc',
+                    '&:hover': {
+                      borderColor: '#0066cc',
+                      backgroundColor: 'rgba(0, 102, 204, 0.1)',
+                    },
+                    fontSize: '1.1rem',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  CGV {location.label}
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

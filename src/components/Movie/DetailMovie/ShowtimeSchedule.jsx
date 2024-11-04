@@ -5,8 +5,10 @@ import dayjs from 'dayjs';
 import { getMovieShowtimes } from '../../../api/movieService';
 import MovieCalendar from './MovieCalendar';
 import ShowtimeList from './ShowtimeList';
+import { useLocation } from '../../../contexts/LocationContext';
 
 function ShowtimeSchedule({ movieData }) {
+  const { location } = useLocation();
   const now = dayjs();
   const [selectedDate, setSelectedDate] = useState(now);
   const [currentTime] = useState(now.format('HH:mm'));
@@ -20,12 +22,17 @@ function ShowtimeSchedule({ movieData }) {
       setLoading(true);
       setError(null);
       const formattedDate = date.format('YYYY-MM-DD');
+      
+      const response = await getMovieShowtimes(
+        movieData.idmovies, 
+        location,
+        formattedDate
+      );
+      
+      if (!response || !response[0]?.cinemas) {
+        throw new Error('Không có dữ liệu lịch chiếu');
+      }
 
-      // delay 2s
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const response = await getMovieShowtimes(movieData.idmovies, formattedDate);
-      
       const formattedShowtimes = response[0].cinemas.map(cinema => ({
         idcinemas: cinema.idcinemas,
         name: cinema.name,
@@ -49,12 +56,11 @@ function ShowtimeSchedule({ movieData }) {
         })).filter(hall => hall.showtimes.length > 0)
       })).filter(cinema => cinema.hall.length > 0);
 
-      console.log('day la formattedShowtimes',formattedShowtimes);
       setShowtimes(formattedShowtimes);
     } catch (err) {
       setError('Không có suất chiếu nào. Vui lòng chọn ngày khác.');
       setShowtimes([]);
-      console.error(err);
+      console.error('Error fetching showtimes:', err);
     } finally {
       setLoading(false);
     }
@@ -62,11 +68,10 @@ function ShowtimeSchedule({ movieData }) {
 
   useEffect(() => {
     fetchShowtimes(selectedDate);
-  }, [selectedDate, movieData.idmovies]);
+  }, [selectedDate, movieData.idmovies, location]);
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
-    setLoading(true);
   };
 
   const handleTimeSelect = (cinema, hall, showtime) => {
