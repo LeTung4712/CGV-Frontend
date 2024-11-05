@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Box, Container, Typography, Button } from '@mui/material';
 import { useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { getSeatStatus } from '../../api/movieService';
 import MovieInfo from '../../components/Movie/Ticket/MovieInfo';
 import SeatSelection from '../../components/Movie/Ticket/SeatSelection';
 import TicketSummary from '../../components/Movie/Ticket/TicketSummary';
+import PaymentMethod from '../../components/Movie/Ticket/PaymentMethod';
 
 const SEAT_PRICES = {
   NORMAL: 90000,
@@ -15,40 +16,79 @@ const SEAT_PRICES = {
 function Ticket() {
   const location = useLocation();
   const navigate = useNavigate();
+  const ticketData = location.state;
+  const seatSelectionRef = useRef(null);
+  
+  // Các state cần thiết
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seatStatus, setSeatStatus] = useState(null);
   const [loading, setLoading] = useState(true);
-  const ticketData = location.state;
-  console.log('ticketData', ticketData);
   const [isExpired, setIsExpired] = useState(false);
+  const [pageLoaded, setPageLoaded] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
 
+  // Kiểm tra ticketData ngay từ đầu
+  if (!ticketData) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Tách phần fetch data ra một useEffect riêng
   useEffect(() => {
+    let mounted = true;
+
     const fetchSeatStatus = async () => {
       try {
+        setLoading(true);
         const response = await getSeatStatus(ticketData?.showtime?.id);
-        console.log('seat status', response);
-        setSeatStatus(response[0].bookedSeats);
+        if (mounted) {
+          setSeatStatus(response[0].bookedSeats);
+        }
       } catch (error) {
         console.error('Error fetching seat status:', error);
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
     if (ticketData?.showtime?.id) {
       fetchSeatStatus();
     }
+
+    return () => {
+      mounted = false;
+    };
   }, [ticketData?.showtime?.id]);
 
-  const calculateTotal = () => {
-    return selectedSeats.reduce((total, seat) => {
-      return total + SEAT_PRICES[seat.type];
-    }, 0);
-  };
+  // Xử lý scroll sau khi load
+  useEffect(() => {
+    if (!loading && seatStatus && seatSelectionRef.current) {
+      // Đợi một frame để đảm bảo layout đã được tính toán
+      requestAnimationFrame(() => {
+        setPageLoaded(true);
+        
+        const scrollTimeout = setTimeout(() => {
+          const yOffset = -80;
+          const element = seatSelectionRef.current;
+          const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
 
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
+        }, 300);
+
+        return () => clearTimeout(scrollTimeout);
+      });
+    }
+  }, [loading, seatStatus]);
+
+  // Tách các handlers ra
   const handleBack = () => {
     navigate(`/movie/${ticketData.movie.title}`, { 
-      state:  ticketData.movie  // Truyền lại thông tin phim
+      state: ticketData.movie
     });
   };
 
@@ -56,18 +96,72 @@ function Ticket() {
     setIsExpired(true);
   };
 
-  if (!ticketData) {
-    return <Navigate to="/" replace />;
-  }
+  const handlePaymentClick = () => {
+    setShowPayment(true);
+  };
+
+  const handlePaymentSubmit = (paymentMethod) => {
+    // Xử lý submit payment method ở đây
+    console.log('Selected payment method:', paymentMethod);
+    // Có thể chuyển hướng đến trang thanh toán tương ứng
+  };
+
+  const handlePaymentMethodChange = (method) => {
+    setSelectedPaymentMethod(method);
+  };
+
+  const handleBackToSeats = () => {
+    setShowPayment(false);
+    setSelectedPaymentMethod('');
+  };
+
+  // Memoize tính toán tổng tiền
+  const totalAmount = useMemo(() => {
+    return selectedSeats.reduce((total, seat) => {
+      return total + SEAT_PRICES[seat.type];
+    }, 0);
+  }, [selectedSeats]);
+
+  // Tách phần UI khi expired ra component riêng
+  const renderExpiredContent = () => (
+    <Box sx={{
+      p: 4,
+      bgcolor: 'white',
+      borderRadius: 2,
+      textAlign: 'center',
+      maxWidth: 500,
+      mx: 'auto',
+      mt: 4
+    }}>
+      <Typography variant="h6" color="error" gutterBottom>
+        Hết thời gian mua vé
+      </Typography>
+      <Typography color="text.secondary" sx={{ mb: 3 }}>
+        Rất tiếc, phiên giao dịch của bạn đã hết hạn. Bạn có thể bắt đầu lại bằng cách nhấn vào nút bên dưới.
+      </Typography>
+      <Button
+        variant="contained"
+        onClick={handleBack}
+        sx={{ 
+          textTransform: 'none',
+          minWidth: 120
+        }}
+      >
+        Trở lại
+      </Button>
+    </Box>
+  );
 
   return (
     <Box sx={{ 
       bgcolor: '#f5f5f5',
       minHeight: '100vh',
       pt: { xs: 2, md: 3 },
-      pb: { xs: 4, md: 6 }
+      pb: { xs: 4, md: 6 },
+      opacity: pageLoaded ? 1 : 0,
+      transition: 'opacity 0.3s ease-in-out',
     }}>
-      <Container maxWidth="lg">
+      <Container maxWidth={false} sx={{ px: { xs: 2, md: 4 } }}>
         <Box sx={{ 
           display: 'flex', 
           flexDirection: 'column', 
@@ -75,63 +169,46 @@ function Ticket() {
         }}>
           <MovieInfo movieData={ticketData.movie} />
           
-          {isExpired ? (
-            <Box sx={{
-              p: 4,
-              bgcolor: 'white',
-              borderRadius: 2,
-              textAlign: 'center',
-              maxWidth: 500,
-              mx: 'auto',
-              mt: 4
-            }}>
-              <Typography variant="h6" color="error" gutterBottom>
-                Hết thời gian mua vé
-              </Typography>
-              <Typography color="text.secondary" sx={{ mb: 3 }}>
-                Rất tiếc, phiên giao dịch của bạn đã hết hạn. Bạn có thể bắt đầu lại bằng cách nhấn vào nút bên dưới.
-              </Typography>
-              <Button
-                variant="contained"
-                onClick={handleBack}
-                sx={{ 
-                  textTransform: 'none',
-                  minWidth: 120
-                }}
-              >
-                Trở lại
-              </Button>
-            </Box>
-          ) : (
-            <Box sx={{ 
-              display: 'flex', 
-              gap: { xs: 2, md: 3 },
-              flexDirection: { xs: 'column', md: 'row' }
-            }}>
-              <Box sx={{ 
-                flex: { xs: '1', md: '0 0 calc(70% - 12px)' },
-                display: 'flex',
-                flexDirection: 'column',
-                gap: { xs: 2, md: 3 }
-              }}>
-                <SeatSelection 
-                  selectedSeats={selectedSeats}
-                  onSeatsChange={setSelectedSeats}
-                  seatStatus={seatStatus}
-                  loading={loading}
-                />
+          {isExpired ? renderExpiredContent() : (
+            <Box 
+              ref={seatSelectionRef}
+              sx={{ 
+                display: 'flex', 
+                gap: { xs: 2, md: 3 },
+                flexDirection: { xs: 'column', md: 'row' },
+                scrollMarginTop: '80px',
+                transform: pageLoaded ? 'translateY(0)' : 'translateY(20px)',
+                transition: 'transform 0.5s ease-in-out',
+              }}
+            >
+              <Box sx={{ flex: { xs: '1', md: '0 0 calc(65% - 12px)' } }}>
+                {!loading && !showPayment && (
+                  <SeatSelection 
+                    selectedSeats={selectedSeats}
+                    onSeatsChange={setSelectedSeats}
+                    seatStatus={seatStatus}
+                  />
+                )}
+                {showPayment && (
+                  <PaymentMethod 
+                    selectedMethod={selectedPaymentMethod}
+                    onMethodChange={handlePaymentMethodChange}
+                  />
+                )}
               </Box>
 
-              <Box sx={{ 
-                flex: { xs: '1', md: '0 0 calc(30% - 12px)' }
-              }}>
+              <Box sx={{ flex: { xs: '1', md: '0 0 calc(35% - 12px)' } }}>
                 <TicketSummary 
                   selectedSeats={selectedSeats}
-                  totalAmount={calculateTotal()}
+                  movieInfo={ticketData.movie}
                   cinemaInfo={ticketData.cinema}
                   hallInfo={ticketData.hall}
                   showtimeInfo={ticketData.showtime}
                   onExpired={handleExpired}
+                  onPaymentClick={handlePaymentClick}
+                  showPayment={showPayment}
+                  selectedPaymentMethod={selectedPaymentMethod}
+                  onBackClick={handleBackToSeats}
                 />
               </Box>
             </Box>

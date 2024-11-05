@@ -8,6 +8,9 @@
 /* Global styles */
 html {
   scroll-behavior: smooth;
+  --scroll-behavior: smooth;
+  --scroll-duration: 1000ms;
+  --scroll-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {

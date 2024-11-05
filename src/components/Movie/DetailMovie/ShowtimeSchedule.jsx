@@ -103,10 +103,13 @@ function ShowtimeSchedule({ movieData }) {
       id="showtimes-section"
       sx={{ 
         backgroundColor: '#fff',
-        borderRadius: 2,
+        borderRadius: 0,
         boxShadow: 1,
         mt: 3,
         mb: 3,
+        width: '100%',
+        margin: '0 auto',
+        mx: 0,
       }}
     >
       <Typography

@@ -116,16 +116,19 @@ function MovieInfo({ movieData }) {
   return (
     <BlurredBackground bgimage={movieData.image}>
       <Box sx={{ 
-        py: { xs: 3, md: 5 },
-        px: { xs: 2, md: 3 },
+        py: { xs: '24px 2px', md: '48px 2px' },
+        px: 0,
         position: 'relative',
         zIndex: 1,
-        minHeight: '100vh'
+        minHeight: '100vh',
+        width: '100%',
       }}>
         <GlassPaper elevation={0} sx={{ 
           p: { xs: 2, sm: 3, md: 4 },
-          borderRadius: 4,
-          height: '100%'
+          pb: '2px',
+          borderRadius: 0,
+          height: '100%',
+          width: '100%',
         }}>
           <Grid container spacing={{ xs: 4, md: 6 }}>
             {/* Phần poster */}

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, Divider, Stack } from '@mui/material';
+import React, { useState, useEffect, useRef } from 'react';
+import { Box, Button, Typography, Divider, Stack, FormControlLabel, Checkbox } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import TimerIcon from '@mui/icons-material/Timer';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ConfirmDialog from './ConfirmDialog';
 
 const SEAT_PRICES = {
   NORMAL: 90000,
@@ -63,9 +65,17 @@ function TicketSummary({
   cinemaInfo, 
   hallInfo, 
   showtimeInfo,
-  onExpired
+  movieInfo,
+  onExpired,
+  showPayment,
+  selectedPaymentMethod,
+  onPaymentClick,
+  onBackClick,
 }) {
   const navigate = useNavigate();
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const paymentButtonRef = useRef(null);
 
   // Nhóm ghế theo loại
   const groupedSeats = selectedSeats.reduce((acc, seat) => {
@@ -88,47 +98,112 @@ function TicketSummary({
     return `${row}${number}-${number + 1}`;
   };
 
+  const handlePaymentClick = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleConfirmClose = () => {
+    setOpenConfirm(false);
+  };
+
+  const handleConfirmPayment = () => {
+    setOpenConfirm(false);
+    navigate('/payment');
+  };
+
   return (
     <Box sx={{ 
-      p: 3, 
+      p: 2.5,
       bgcolor: 'white',
       borderRadius: 2,
       boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
       position: 'sticky',
-      top: 24
+      top: { xs: 24, md: 88 },
+      transition: 'top 0.3s ease',
+      zIndex: 10,
     }}>
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        mb: 2 
-      }}>
-        <Typography variant="subtitle1" fontWeight="bold">
-          Thông tin đặt vé
-        </Typography>
-      </Box>
+      
 
-      <Stack spacing={1.5} sx={{ flex: 1 }}>
+      <Stack spacing={2}>
+        {/* Thông tin phim */}
         <Box>
-          <Typography variant="body2">Rạp: {cinemaInfo?.name}</Typography>
-          <Typography variant="body2">Phòng chiếu: {hallInfo?.name}</Typography>
-          <Typography variant="body2">
-            Suất chiếu: {showtimeInfo?.time} - {showtimeInfo?.date}
+          <Typography 
+            variant="h5" 
+            color="primary.main"
+            fontWeight="700"
+            sx={{ 
+              mb: 1.5,
+              lineHeight: 1.3,
+              fontSize: { xs: '1.5rem', md: '1.7rem' }
+            }}
+          >
+            {movieInfo?.name}
           </Typography>
+          <Typography 
+            variant="h5" 
+            fontWeight="700"
+            sx={{ 
+              fontSize: { xs: '1rem', md: '1.1rem' },
+              fontWeight: 500,
+              mb: 1.5
+            }}
+          >
+            {movieInfo?.language}
+          </Typography>
+
+          <Divider />
+          <Stack spacing={0.5} sx={{ mt: 1.5 }}>
+            <Typography 
+              variant="body1"
+              color="text.secondary"
+              sx={{ 
+                fontSize: { xs: '1rem', md: '1.1rem' },
+                fontWeight: 500
+              }}
+            >
+              {cinemaInfo?.name}
+            </Typography>
+            <Typography 
+              variant="body1"
+              color="text.secondary"
+              sx={{ 
+                fontSize: { xs: '1rem', md: '1.1rem' }
+              }}
+            >
+              {hallInfo?.name} - {showtimeInfo?.date} - Suất chiếu: {showtimeInfo?.time}
+            </Typography>
+          </Stack>
         </Box>
 
         <Divider />
 
-        <Box sx={{ flex: 1 }}>
+        {/* Thông tin ghế */}
+        <Box>
+          <Typography 
+            variant="h6"
+            fontWeight="600"
+            sx={{ mb: 1 }}
+          >
+            Ghế đã chọn
+          </Typography>
           {selectedSeats.length === 0 ? (
-            <Typography color="error" variant="body2">
-              Bạn chưa chọn ghế. Vui lòng chọn ghế.
+            <Typography 
+              color="error.main" 
+              sx={{ fontSize: { xs: '1rem', md: '1.1rem' } }}
+            >
+              Vui lòng chọn ghế
             </Typography>
           ) : (
-            <>
+            <Stack spacing={1.5}>
               {Object.entries(groupedSeats).map(([type, seats]) => (
-                <Box key={type} sx={{ py: 0.5 }}>
-                  <Typography variant="body2">
+                <Box key={type}>
+                  <Typography 
+                    sx={{ 
+                      fontSize: { xs: '1rem', md: '1.1rem' },
+                      color: 'text.primary',
+                      mb: 0.5
+                    }}
+                  >
                     Ghế {SEAT_TYPES[type]}: 
                     {seats.map(seat => 
                       type === 'COUPLE' 
@@ -136,45 +211,132 @@ function TicketSummary({
                         : ` ${seat.number}`
                     ).join(', ')}
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography 
+                    sx={{ 
+                      fontSize: { xs: '1rem', md: '1.1rem' },
+                      color: 'text.secondary'
+                    }}
+                  >
                     {seats.length} x {SEAT_PRICES[type].toLocaleString()}đ = {
                       (seats.length * SEAT_PRICES[type]).toLocaleString()
                     }đ
                   </Typography>
                 </Box>
               ))}
-            </>
+            </Stack>
           )}
         </Box>
 
         {selectedSeats.length > 0 && (
           <>
             <Divider />
+            
+            {/* Tổng tiền và thanh toán */}
             <Box>
-              <Typography variant="h6" sx={{ 
-                color: 'primary.main',
-                fontWeight: 'bold',
-                mb: 1
+              <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                mb: 2
               }}>
-                Tổng tiền: {totalAmount.toLocaleString()}đ
-              </Typography>
+                <Typography 
+                  variant="h6"
+                  fontWeight="600"
+                >
+                  Tổng tiền:
+                </Typography>
+                <Typography 
+                  variant="h5"
+                  color="primary.main"
+                  fontWeight="bold"
+                  sx={{ fontSize: { xs: '1.5rem', md: '1.7rem' } }}
+                >
+                  {totalAmount.toLocaleString()}đ
+                </Typography>
+              </Box>
 
-              <Button 
-                variant="contained" 
-                fullWidth
-                onClick={() => navigate('/payment')}
-                sx={{ 
-                  textTransform: 'none',
-                  borderRadius: 1
-                }}
-              >
-                Thanh toán
-              </Button>
+              {showPayment && selectedPaymentMethod && (
+                <FormControlLabel
+                  control={
+                    <Checkbox 
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
+                      size="medium"
+                    />
+                  }
+                  label={
+                    <Typography 
+                      sx={{ 
+                        fontSize: { xs: '1rem', md: '1.1rem' },
+                        color: 'text.secondary',
+                        '&:hover': { 
+                          textDecoration: 'underline',
+                          cursor: 'pointer'
+                        }
+                      }}
+                    >
+                      Tôi đã đọc và đồng ý với Điều khoản thanh toán
+                    </Typography>
+                  }
+                  sx={{ mb: 2 }}
+                />
+              )}
+
+              <Stack spacing={1.5}>
+                <Button 
+                  ref={paymentButtonRef}
+                  variant="contained" 
+                  fullWidth
+                  onClick={showPayment ? handlePaymentClick : onPaymentClick}
+                  disabled={showPayment && (!selectedPaymentMethod || !termsAccepted)}
+                  sx={{ 
+                    textTransform: 'none',
+                    borderRadius: 1,
+                    py: 1.5,
+                    fontSize: { xs: '1rem', md: '1.1rem' },
+                    fontWeight: 600
+                  }}
+                >
+                  {showPayment ? 'Thanh toán' : 'Chọn hình thức thanh toán'}
+                </Button>
+
+                <ConfirmDialog
+                  open={openConfirm}
+                  onClose={handleConfirmClose}
+                  onConfirm={handleConfirmPayment}
+                  buttonRef={paymentButtonRef}
+                />
+
+                {showPayment && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                      startIcon={<ArrowBackIcon />}
+                      onClick={onBackClick}
+                      sx={{ 
+                        width: 'fit-content',
+                        textTransform: 'none',
+                        color: 'text.primary',
+                        '&:hover': {
+                          bgcolor: 'transparent',
+                          color: 'primary.main'
+                        },
+                        p: 0,
+                        fontSize: { xs: '1rem', md: '1.1rem' },
+                        mt: 1
+                      }}
+                    >
+                      Trở lại
+                    </Button>
+                  </Box>
+                )}
+              </Stack>
             </Box>
           </>
         )}
 
         <Divider />
+        
+        {/* Timer */}
         <Timer onExpired={onExpired} />
       </Stack>
     </Box>

@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import bannerImage from '../../assets/banner-top-website-giang-sinh.jpg';
+import bannerImage from '../../assets/images/banner-top-website-giang-sinh.jpg';
 
 export default function BannerTop() {
   return (

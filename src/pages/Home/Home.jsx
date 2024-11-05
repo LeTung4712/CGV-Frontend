@@ -7,7 +7,7 @@ import MovieSelection from "../../components/Home/MovieSelection";
 import EventSection from "../../components/Home/EventSection";
 import PromotionCard from "../../components/Home/PromotionCard";
 
-import homeBackground from "../../assets/home-background.jpg";
+import homeBackground from "../../assets/images/home-background.jpg";
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
