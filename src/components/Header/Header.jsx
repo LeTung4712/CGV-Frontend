@@ -28,7 +28,8 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import logo from '../../assets/cgvlogo.png';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import logo from '../../assets/images/cgvlogo.png';
 import { useLocation } from '../../contexts/LocationContext';
 
 const navigation = {
@@ -268,17 +269,41 @@ function Header() {
                 alignItems: 'center',
                 flexGrow: 1 
               }}>
-                <IconButton
-                  onClick={handleDrawerToggle}
-                  sx={{ mr: 2 }}
-                >
-                  <MenuIcon />
-                </IconButton>
+                {/* Logo */}
                 <Link to="/">
                   <img src={logo} alt="Logo" style={{ height: '30px' }} />
                 </Link>
+                
                 <Box sx={{ flexGrow: 1 }} /> {/* Spacer */}
+                
+                {/* Location Selector */}
                 <LocationSelector isMobile />
+                
+                {/* Login/Register cho Mobile */}
+                {!user ? (
+                  <IconButton
+                    component={Link}
+                    to="/login"
+                    sx={{ color: 'text.primary' }}
+                  >
+                    <PersonOutlineIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={logoutOnclick}
+                    sx={{ color: 'text.primary' }}
+                  >
+                    <PersonOutlineIcon />
+                  </IconButton>
+                )}
+                
+                {/* Menu Button */}
+                <IconButton
+                  onClick={handleDrawerToggle}
+                  sx={{ ml: 1 }}
+                >
+                  <MenuIcon />
+                </IconButton>
               </Box>
 
               {/* Login/Register Button và Location Selector cho Desktop */}
@@ -320,35 +345,12 @@ function Header() {
                   </Stack>
                 )}
               </Box>
-
-              {/* Thêm Login/Register cho Mobile */}
-              <Box sx={{ 
-                display: { xs: 'flex', md: 'none' },
-                alignItems: 'center'
-              }}>
-                {!user ? (
-                  <Button
-                    component={Link}
-                    to="/login"
-                    sx={styles.navigationButton}
-                  >
-                    ĐĂNG NHẬP
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={logoutOnclick}
-                    sx={styles.navigationButton}
-                  >
-                    THOÁT
-                  </Button>
-                )}
-              </Box>
             </Toolbar>
           </Container>
 
           {/* Mobile Drawer */}
           <Drawer
-            anchor="left"
+            anchor="right"
             open={mobileOpen}
             onClose={handleDrawerToggle}
             sx={{
@@ -356,7 +358,8 @@ function Header() {
               '& .MuiDrawer-paper': { 
                 boxSizing: 'border-box', 
                 width: 240,
-                backgroundColor: '#fdfcf0'
+                backgroundColor: '#fdfcf0',
+                transition: 'transform 0.3s ease-in-out',
               },
             }}
           >
