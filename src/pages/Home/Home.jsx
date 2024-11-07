@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography, CircularProgress } from "@mui/material";
 import { getMoviesNowShowing } from "../../api/movieService";
+import { fakeDataManager } from '../../utils/fakeDataManager';
 
 import BannerSlider from "../../components/Home/BannerSlider";
 import MovieSelection from "../../components/Home/MovieSelection";
@@ -16,24 +17,35 @@ export default function Home() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchMovies = async () => {
       try {
         setIsLoading(true);
+        setError(null);
         const res = await getMoviesNowShowing();
-        setMovies(res);
+        if (isMounted) {
+          setMovies(res);
+        }
       } catch (error) {
         console.error("Failed to fetch movies:", error);
-        setError(error);
+        if (isMounted) {
+          setError(error);
+          setMovies(fakeDataManager.getMovies([]));
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
+    
     fetchMovies();
-  }, []);
 
-  if (error) {
-    return <Box>Error loading movies</Box>;
-  }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <Box 
@@ -63,7 +75,7 @@ export default function Home() {
         }}
       >
         <BannerSlider />
-        
+                
         {!isLoading && movies.length > 0 && (
           <MovieSelection movies={movies} />
         )}

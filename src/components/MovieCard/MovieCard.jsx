@@ -36,13 +36,14 @@ export default function MovieCard({ movie }) {
       <Card 
         sx={{ 
           width: '100%',
-          height: { xs: '320px', sm: '380px', md: '420px' },
+          height: { xs: '360px', sm: '420px', md: '460px' },
           boxShadow: 3,
           backgroundColor: 'rgba(0, 0, 0, 0.2)',
           cursor: 'pointer',
           display: 'flex',
           flexDirection: 'column',
           backdropFilter: 'blur(2px)',
+          borderRadius: '12px',
         }}
         onClick={handleMovieClick}
       >
@@ -53,9 +54,12 @@ export default function MovieCard({ movie }) {
             '&:hover .movie-overlay': {
               opacity: 1
             },
-            borderRadius: 2,
+            borderRadius: '12px',
             overflow: 'hidden',
-            height: { xs: '260px', sm: '310px', md: '340px' },
+            height: 0,
+            paddingTop: '150%',
+            border: '2px solid rgba(255, 255, 255, 0.1)',
+            mb: 1,
           }}
         >
           <CardMedia
@@ -63,8 +67,13 @@ export default function MovieCard({ movie }) {
             image={movie.image_url}
             alt={movie.title}
             sx={{ 
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
               height: '100%',
               objectFit: 'cover',
+              borderRadius: '10px',
             }}
           />
           
@@ -72,6 +81,7 @@ export default function MovieCard({ movie }) {
           <Box
             className="movie-overlay"
             sx={{
+              borderRadius: '10px',
               position: 'absolute',
               top: 0,
               left: 0,
