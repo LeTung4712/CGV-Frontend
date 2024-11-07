@@ -8,9 +8,9 @@ import {
   Stack,
   Divider
 } from '@mui/material';
-import vnpayIcon from '../../../assets/images/vnpay.png';
-import momoIcon from '../../../assets/images/momo.png';
-import zaloPayIcon from '../../../assets/images/zalopay.png';
+import vnpayIcon from '../../../assets/images/payment-icons/vnpay.png';
+import momoIcon from '../../../assets/images/payment-icons/momo.png';
+import zaloPayIcon from '../../../assets/images/payment-icons/zalopay.png';
 
 const PAYMENT_METHODS = [
   {
