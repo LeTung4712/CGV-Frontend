@@ -107,10 +107,10 @@ export default function MovieCard({ movie }) {
               sx={{
                 bgcolor: 'primary.main',
                 color: 'white',
-                minWidth: '140px',
-                fontSize: '1.1rem',
+                minWidth: { xs: '120px', sm: '140px' },
+                fontSize: { xs: '0.9rem', sm: '1.1rem' },
                 fontWeight: 600,
-                padding: '8px 16px',
+                padding: { xs: '6px 12px', sm: '8px 16px' },
                 '&:hover': {
                   bgcolor: 'primary.dark'
                 }

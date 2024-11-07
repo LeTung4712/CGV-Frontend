@@ -82,7 +82,8 @@ const styles = {
     },
     '& .MuiOutlinedInput-notchedOutline': {
       borderColor: '#0066cc',
-      borderWidth: '2px'
+      borderWidth: '2px',
+      borderRadius: '8px'
     },
     '&:hover .MuiOutlinedInput-notchedOutline': {
       borderColor: '#0066cc'
@@ -115,7 +116,17 @@ const styles = {
         opacity: 1
       }
     }
-  })
+  }),
+  loginButton: {
+    backgroundColor: '#0066cc',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#0052a3'
+    },
+    borderRadius: '8px',
+    px: 2,
+    py: 1
+  }
 };
 
 function Header() {
@@ -331,7 +342,7 @@ function Header() {
                   <Button
                     component={Link}
                     to="/login"
-                    sx={styles.navigationButton}
+                    sx={styles.loginButton}
                   >
                     ĐĂNG NHẬP/ĐĂNG KÝ
                   </Button>
