@@ -6,6 +6,7 @@ import BannerSlider from "../../components/Home/BannerSlider";
 import MovieSelection from "../../components/Home/MovieSelection";
 import EventSection from "../../components/Home/EventSection";
 import PromotionCard from "../../components/Home/PromotionCard";
+import PopcornAnimation from '../../components/Home/PopcornAnimation';
 
 import homeBackground from "../../assets/images/home-background.jpg";
 
@@ -57,7 +58,8 @@ export default function Home() {
           backgroundRepeat: 'no-repeat',
           maxWidth: '1536px',
           mx: 'auto',
-          width: '100%'
+          width: '100%',
+          position: 'relative'
         }}
       >
         <BannerSlider />
@@ -69,6 +71,8 @@ export default function Home() {
         <EventSection />
         <PromotionCard />
       </Container>
+      
+      <PopcornAnimation />
     </Box>
   );
 }
