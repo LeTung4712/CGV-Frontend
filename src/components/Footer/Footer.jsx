@@ -57,6 +57,21 @@ const SocialImage = styled('img')({
   height: 'auto'
 });
 
+const BRAND_IMAGES = [
+  { src: _4xd, name: '4DX' },
+  { src: imax, name: 'IMAX' },
+  { src: sturium, name: 'Starium' },
+  { src: goldclass, name: 'Gold Class' },
+  { src: lamour, name: "L'amour" },
+  { src: sweetbox, name: 'Sweetbox' },
+  { src: cineS, name: 'CineS' },
+  { src: premium, name: 'Premium' },
+  { src: screenX, name: 'ScreenX' },
+  { src: cineF, name: 'CineF' },
+  { src: cineL, name: 'CineL' },
+  { src: suit, name: 'Suit' }
+];
+
 function Footer() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -75,7 +90,7 @@ function Footer() {
           position: 'relative',
           overflow: 'visible'
         }}>
-          {[_4xd, imax, sturium, goldclass, lamour, sweetbox, cineS, premium, screenX, cineF, cineL, suit].map((brand, index) => (
+          {BRAND_IMAGES.map((brand, index) => (
             <Grid item xs={4} sm={3} md={1} key={index}>
               <BrandContainer isMobile={isMobile} sx={{ 
                 p: 1.5,
@@ -85,14 +100,14 @@ function Footer() {
                 }
               }}>
                 <Link 
-                  href="https://www.facebook.com/" 
+                  href={`https://www.cgv.vn/default/theaters/special/${brand.name.toLowerCase()}`}
                   target="_blank"
                   sx={{
                     display: 'block',
                     textAlign: 'center'
                   }}
                 >
-                  <BrandImage isMobile={isMobile} src={brand} alt={`brand-${index}`} />
+                  <BrandImage isMobile={isMobile} src={brand.src} alt={brand.name} />
                 </Link>
               </BrandContainer>
             </Grid>
