@@ -65,11 +65,12 @@ const styles = {
   navigationButton: {
     color: 'text.primary',
     mx: 1,
-    fontSize: '16px',
+    fontSize: '15px',
     fontWeight: 600,
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
     letterSpacing: '0.5px',
-    '&:hover': { backgroundColor: 'transparent' }
+    '&:hover': { backgroundColor: 'transparent' },
+    py: 1.5
   },
   select: (isMobile) => ({
     backgroundColor: '#fdfcf0',
@@ -106,6 +107,7 @@ const styles = {
     borderColor: 'divider',
     zIndex: (theme) => theme.zIndex.drawer + 1,
     animation: trigger ? 'stuckMoveDown 0.6s' : 'none',
+    position: 'relative',
     '@keyframes stuckMoveDown': {
       '0%': {
         transform: 'translateY(-100%)',
@@ -115,6 +117,10 @@ const styles = {
         transform: 'translateY(0)',
         opacity: 1
       }
+    },
+    '& .MuiToolbar-root': {
+      minHeight: { xs: '60px', sm: '70px' },
+      py: { xs: 0.5, sm: 1 }
     }
   }),
   loginButton: {
@@ -124,8 +130,8 @@ const styles = {
       backgroundColor: '#0052a3'
     },
     borderRadius: '8px',
-    px: 2,
-    py: 1
+    px: 3,
+    py: 1.5
   }
 };
 
@@ -211,7 +217,7 @@ function Header() {
               {/* Logo */}
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <Link to="/">
-                  <img src={logo} alt="Logo" style={{ height: '40px' }} />
+                  <img src={logo} alt="Logo" style={{ height: '45px' }} />
                 </Link>
               </Box>
 
@@ -294,7 +300,7 @@ function Header() {
               }}>
                 {/* Logo */}
                 <Link to="/">
-                  <img src={logo} alt="Logo" style={{ height: '30px' }} />
+                  <img src={logo} alt="Logo" style={{ height: '35px' }} />
                 </Link>
                 
                 <Box sx={{ flexGrow: 1 }} /> {/* Spacer */}

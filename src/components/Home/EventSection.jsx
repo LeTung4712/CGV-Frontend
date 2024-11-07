@@ -1,4 +1,5 @@
 import { Box, Typography, Container } from "@mui/material";
+import { Link } from 'react-router-dom';
 
 const events = [
   {
@@ -8,6 +9,7 @@ const events = [
       "Công nghệ in hiện đại mang lại những sản phẩm áo thun BST Halloween của BHDS & SaigonInk có hình in sắc nét, màu sắc sinh động",
     image:
       "https://www.bhdstar.vn/wp-content/uploads/2024/10/Ao-thun-Sai-gon-ink-vuong-2.jpg",
+    url: "https://www.bhdstar.vn/mon-an/combo-ao-thun-bhds-x-saigonink-sieu-chat/",
   },
   {
     id: 2,
@@ -16,6 +18,7 @@ const events = [
       "Mua combo bắp nước kèm túi tole hoặc quai xách ly siêu xinh với giá siêu ưu đãi",
     image:
       "https://www.bhdstar.vn/wp-content/uploads/2024/09/tui-tote-1x1-1.png",
+    url: "https://www.bhdstar.vn/mon-an/combo-tui-tole-quai-xach-ly/",
   },
   {
     id: 3,
@@ -24,6 +27,7 @@ const events = [
       "Mua combo bắp nước kèm 1 sản phẩm Conan với giá cực hời",
     image:
       "https://www.bhdstar.vn/wp-content/uploads/2024/09/combo-conan-moi.jpg",
+    url: "https://www.bhdstar.vn/mon-an/combo-conan-tham-tu-lung-danh/",
   },
 ];
 
@@ -72,55 +76,61 @@ export default function EventSection() {
           }}
         >
           {events.map((event) => (
-            <Box
+            <Link 
               key={event.id}
-              sx={{
-                overflow: "hidden",
-                backgroundColor: "transparent",
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.03)",
-                },
-              }}
+              to={event.url}
+              style={{ textDecoration: 'none' }}
             >
               <Box
-                component="img"
-                src={event.image}
-                alt={event.title}
                 sx={{
-                  width: 415,
-                  height: 415,
-                  objectFit: "cover",
-                  borderRadius: 2,
+                  overflow: "hidden",
+                  backgroundColor: "transparent",
+                  transition: "transform 0.3s ease-in-out",
+                  cursor: 'pointer',
+                  "&:hover": {
+                    transform: "scale(1.03)",
+                  },
                 }}
-              />
-              <Box sx={{ p: 2 }}>
-                <Typography
-                  variant="h6"
+              >
+                <Box
+                  component="img"
+                  src={event.image}
+                  alt={event.title}
                   sx={{
-                    fontWeight: "bold",
-                    mb: 1,
-                    color: "primary.main",
-                    fontSize: { xs: '0.9rem', md: '1.1rem' },
+                    width: '100%',
+                    height: { xs: 400, sm: 350, md: 415 },
+                    objectFit: "cover",
+                    borderRadius: 2,
                   }}
-                >
-                  {event.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: "#000",
-                    display: '-webkit-box',
-                    WebkitLineClamp: 5,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  {event.description}
-                </Typography>
+                />
+                <Box sx={{ p: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: "bold",
+                      mb: 1,
+                      color: "primary.main",
+                      fontSize: { xs: '0.9rem', md: '1.1rem' },
+                    }}
+                  >
+                    {event.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#000",
+                      display: '-webkit-box',
+                      WebkitLineClamp: 5,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {event.description}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
+            </Link>
           ))}
         </Box>
       </Container>

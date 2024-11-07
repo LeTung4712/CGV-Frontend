@@ -41,7 +41,7 @@ export default function Home() {
       sx={{
         minHeight: '100vh',
         backgroundColor: 'background.default',
-        pt: { xs: 2, md: 3 },
+        pt: 0,
         pb: { xs: 4, md: 6 }
       }}
     >

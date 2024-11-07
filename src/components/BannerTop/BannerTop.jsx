@@ -13,9 +13,10 @@ export default function BannerTop() {
           md: '120px'
         },
         backgroundImage: `url(${bannerImage})`,
-        backgroundSize: 'cover',
+        backgroundSize: '100% 100%',
         backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
+        backgroundRepeat: 'no-repeat',
+        display: 'block'
       }}
     />
   );
