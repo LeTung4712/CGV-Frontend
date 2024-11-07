@@ -7,7 +7,8 @@ import {
   Typography,
   Box,
   IconButton,
-  Button
+  Button,
+  Tooltip
 } from "@mui/material";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
@@ -107,10 +108,10 @@ export default function MovieCard({ movie }) {
               sx={{
                 bgcolor: 'primary.main',
                 color: 'white',
-                minWidth: '140px',
-                fontSize: '1.1rem',
+                minWidth: { xs: '120px', sm: '140px' },
+                fontSize: { xs: '0.9rem', sm: '1.1rem' },
                 fontWeight: 600,
-                padding: '8px 16px',
+                padding: { xs: '6px 12px', sm: '8px 16px' },
                 '&:hover': {
                   bgcolor: 'primary.dark'
                 }
@@ -134,24 +135,38 @@ export default function MovieCard({ movie }) {
             color: 'white'
           }}
         >
-          <Typography 
-            variant="h6" 
-            component="h3"
-            sx={{
-              fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
-              fontWeight: 'bold',
-              textAlign: 'center',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              lineHeight: 1.2,
-              margin: 0
-            }}
-          >
-            {movie.name}
-          </Typography>
+          <Box sx={{ textAlign: 'left', width: '100%', px: 1 }}>
+            <Tooltip title={movie.name} placement="top">
+              <Typography 
+                variant="h6" 
+                component="h3"
+                sx={{
+                  fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+                  fontWeight: 'bold',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  lineHeight: 1.2,
+                  mb: 0.5,
+                  color: 'primary.main'
+                }}
+              >
+                {movie.name}
+              </Typography>
+            </Tooltip>
+            <Typography 
+              variant="body2" 
+              sx={{
+                fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.9rem' },
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <span style={{ color: 'black' }}>Thể loại: </span>
+              <span style={{ color: 'primary.main' }}>{movie.genre}</span>
+            </Typography>
+          </Box>
         </CardContent>
       </Card>
 

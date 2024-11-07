@@ -1,14 +1,53 @@
 import { Box, Container } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import { slidesData } from "../../constants/slidesData";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+// Import banner images
+import banner1 from "../../assets/images/banner-slides/banner-01.jpg";
+import banner2 from "../../assets/images/banner-slides/banner-02.jpg";
+import banner3 from "../../assets/images/banner-slides/banner-03.jpg";
+import banner4 from "../../assets/images/banner-slides/banner-04.jpg";
+import banner5 from "../../assets/images/banner-slides/banner-05.jpg";
+import banner6 from "../../assets/images/banner-slides/banner-06.jpg";
+import banner7 from "../../assets/images/banner-slides/banner-07.jpg";
+
 export default function BannerSlider() {
+  const slides = [
+    {
+      imgSrc: banner1,
+      href: "/collection/new-arrivals"
+    },
+    {
+      imgSrc: banner2, 
+      href: "/collection/best-seller"
+    },
+    {
+      imgSrc: banner3,
+      href: "/collection/sale"
+    },
+    {
+      imgSrc: banner4,
+      href: "/collection/sale"
+    },
+    {
+      imgSrc: banner5,
+      href: "/collection/sale"
+    },
+    {
+      imgSrc: banner6,
+      href: "/collection/sale"
+    },
+    {
+      imgSrc: banner7,
+      href: "/collection/sale"
+    }
+  ];
+
   return (
     <Box
       component="section"
@@ -73,29 +112,9 @@ export default function BannerSlider() {
           }}
           navigation={true}
         >
-          {slidesData.map((slide, index) => (
+          {slides.map((slide, index) => (
             <SwiperSlide key={index}>
-              <Box
-                component="a"
-                href={slide.href}
-                sx={{
-                  display: "block",
-                  width: "100%",
-                  height: "100%",
-                  position: "relative",
-                }}
-              >
-                <Box
-                  component="img"
-                  src={slide.imgSrc}
-                  alt={`Slide ${index + 1}`}
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              </Box>
+              <img src={slide.imgSrc} alt={`Banner ${index + 1}`} />
             </SwiperSlide>
           ))}
         </Swiper>

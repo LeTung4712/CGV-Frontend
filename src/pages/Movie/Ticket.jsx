@@ -115,12 +115,6 @@ function Ticket() {
     setSelectedPaymentMethod('');
   };
 
-  // Memoize tính toán tổng tiền
-  const totalAmount = useMemo(() => {
-    return selectedSeats.reduce((total, seat) => {
-      return total + SEAT_PRICES[seat.type];
-    }, 0);
-  }, [selectedSeats]);
 
   // Tách phần UI khi expired ra component riêng
   const renderExpiredContent = () => (
@@ -193,6 +187,7 @@ function Ticket() {
                   <PaymentMethod 
                     selectedMethod={selectedPaymentMethod}
                     onMethodChange={handlePaymentMethodChange}
+                    shouldScroll={showPayment}
                   />
                 )}
               </Box>

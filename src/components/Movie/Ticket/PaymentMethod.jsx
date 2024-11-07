@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { 
   Box, 
   Typography, 
@@ -8,9 +8,9 @@ import {
   Stack,
   Divider
 } from '@mui/material';
-import vnpayIcon from '../../../assets/images/vnpay.png';
-import momoIcon from '../../../assets/images/momo.png';
-import zaloPayIcon from '../../../assets/images/zalopay.png';
+import vnpayIcon from '../../../assets/images/payment-icons/vnpay.png';
+import momoIcon from '../../../assets/images/payment-icons/momo.png';
+import zaloPayIcon from '../../../assets/images/payment-icons/zalopay.png';
 
 const PAYMENT_METHODS = [
   {
@@ -30,14 +30,28 @@ const PAYMENT_METHODS = [
   }
 ];
 
-function PaymentMethod({ selectedMethod, onMethodChange }) {
+function PaymentMethod({ selectedMethod, onMethodChange, shouldScroll }) {
+  const paymentRef = useRef(null);
+
+  useEffect(() => {
+    if (shouldScroll && paymentRef.current) {
+      paymentRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }, [shouldScroll]);
+
   return (
-    <Box sx={{ 
-      p: 3, 
-      bgcolor: 'white',
-      borderRadius: 2,
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-    }}>
+    <Box 
+      ref={paymentRef}
+      sx={{ 
+        p: 3, 
+        bgcolor: 'white',
+        borderRadius: 2,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      }}
+    >
       <Typography variant="h6" sx={{ mb: 3 }}>
         Chọn hình thức thanh toán
       </Typography>

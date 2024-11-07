@@ -99,7 +99,25 @@ function TicketSummary({
   };
 
   const handlePaymentClick = () => {
-    setOpenConfirm(true);
+    if (!showPayment) {
+      onPaymentClick();
+      // Thêm timeout nhỏ để đảm bảo component PaymentMethod đã render
+      setTimeout(() => {
+        const paymentElement = document.getElementById('payment-method-section');
+        if (paymentElement) {
+          const offset = 100; // Điều chỉnh offset nếu cần
+          const elementPosition = paymentElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    } else {
+      setOpenConfirm(true);
+    }
   };
 
   const handleConfirmClose = () => {
@@ -109,6 +127,10 @@ function TicketSummary({
   const handleConfirmPayment = () => {
     setOpenConfirm(false);
     navigate('/payment');
+  };
+
+  const handleBackToMovie = () => {
+    navigate(`/movie/${movieInfo.title}`, { state: movieInfo });
   };
 
   return (
@@ -287,7 +309,7 @@ function TicketSummary({
                   ref={paymentButtonRef}
                   variant="contained" 
                   fullWidth
-                  onClick={showPayment ? handlePaymentClick : onPaymentClick}
+                  onClick={handlePaymentClick}
                   disabled={showPayment && (!selectedPaymentMethod || !termsAccepted)}
                   sx={{ 
                     textTransform: 'none',
@@ -307,28 +329,26 @@ function TicketSummary({
                   buttonRef={paymentButtonRef}
                 />
 
-                {showPayment && (
-                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button
-                      startIcon={<ArrowBackIcon />}
-                      onClick={onBackClick}
-                      sx={{ 
-                        width: 'fit-content',
-                        textTransform: 'none',
-                        color: 'text.primary',
-                        '&:hover': {
-                          bgcolor: 'transparent',
-                          color: 'primary.main'
-                        },
-                        p: 0,
-                        fontSize: { xs: '1rem', md: '1.1rem' },
-                        mt: 1
-                      }}
-                    >
-                      Trở lại
-                    </Button>
-                  </Box>
-                )}
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <Button
+                    startIcon={<ArrowBackIcon />}
+                    onClick={showPayment ? onBackClick : handleBackToMovie}
+                    sx={{ 
+                      width: 'fit-content',
+                      textTransform: 'none',
+                      color: 'text.primary',
+                      '&:hover': {
+                        bgcolor: 'transparent',
+                        color: 'primary.main'
+                      },
+                      p: 0,
+                      fontSize: { xs: '1rem', md: '1.1rem' },
+                      mt: 1
+                    }}
+                  >
+                    Trở lại
+                  </Button>
+                </Box>
               </Stack>
             </Box>
           </>

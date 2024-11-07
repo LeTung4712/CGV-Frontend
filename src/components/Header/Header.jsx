@@ -65,11 +65,12 @@ const styles = {
   navigationButton: {
     color: 'text.primary',
     mx: 1,
-    fontSize: '16px',
+    fontSize: '15px',
     fontWeight: 600,
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
     letterSpacing: '0.5px',
-    '&:hover': { backgroundColor: 'transparent' }
+    '&:hover': { backgroundColor: 'transparent' },
+    py: 1.5
   },
   select: (isMobile) => ({
     backgroundColor: '#fdfcf0',
@@ -82,7 +83,8 @@ const styles = {
     },
     '& .MuiOutlinedInput-notchedOutline': {
       borderColor: '#0066cc',
-      borderWidth: '2px'
+      borderWidth: '2px',
+      borderRadius: '8px'
     },
     '&:hover .MuiOutlinedInput-notchedOutline': {
       borderColor: '#0066cc'
@@ -96,6 +98,40 @@ const styles = {
     fontSize: '16px',
     fontWeight: 600,
     letterSpacing: '0.5px'
+  },
+  appBar: (trigger) => ({
+    top: 0,
+    backgroundColor: '#fdfcf0',
+    boxShadow: trigger ? 1 : 0,
+    borderBottom: '1px solid',
+    borderColor: 'divider',
+    zIndex: (theme) => theme.zIndex.drawer + 1,
+    animation: trigger ? 'stuckMoveDown 0.6s' : 'none',
+    position: 'relative',
+    '@keyframes stuckMoveDown': {
+      '0%': {
+        transform: 'translateY(-100%)',
+        opacity: 0
+      },
+      '100%': {
+        transform: 'translateY(0)',
+        opacity: 1
+      }
+    },
+    '& .MuiToolbar-root': {
+      minHeight: { xs: '60px', sm: '70px' },
+      py: { xs: 0.5, sm: 1 }
+    }
+  }),
+  loginButton: {
+    backgroundColor: '#0066cc',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#0052a3'
+    },
+    borderRadius: '8px',
+    px: 3,
+    py: 1.5
   }
 };
 
@@ -169,14 +205,7 @@ function Header() {
         <AppBar 
           position="sticky"
           color="default"
-          sx={{
-            top: 0,
-            backgroundColor: '#fdfcf0',
-            boxShadow: trigger ? 1 : 0,
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-          }}
+          sx={styles.appBar(trigger)}
         >
           <Container maxWidth="xl">
             <Toolbar 
@@ -188,7 +217,7 @@ function Header() {
               {/* Logo */}
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <Link to="/">
-                  <img src={logo} alt="Logo" style={{ height: '40px' }} />
+                  <img src={logo} alt="Logo" style={{ height: '45px' }} />
                 </Link>
               </Box>
 
@@ -271,7 +300,7 @@ function Header() {
               }}>
                 {/* Logo */}
                 <Link to="/">
-                  <img src={logo} alt="Logo" style={{ height: '30px' }} />
+                  <img src={logo} alt="Logo" style={{ height: '35px' }} />
                 </Link>
                 
                 <Box sx={{ flexGrow: 1 }} /> {/* Spacer */}
@@ -319,7 +348,7 @@ function Header() {
                   <Button
                     component={Link}
                     to="/login"
-                    sx={styles.navigationButton}
+                    sx={styles.loginButton}
                   >
                     ĐĂNG NHẬP/ĐĂNG KÝ
                   </Button>
