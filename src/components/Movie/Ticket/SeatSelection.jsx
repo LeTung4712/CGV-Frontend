@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { Box, Typography, Grid, useTheme, useMediaQuery } from '@mui/material';
+import React, { useMemo, useState, useEffect } from 'react';
+import { Box, Typography, Grid, useTheme, useMediaQuery, Snackbar, Alert, LinearProgress } from '@mui/material';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import WeekendIcon from '@mui/icons-material/Weekend';
 import ChairIcon from '@mui/icons-material/Chair';
@@ -93,6 +93,46 @@ function SeatSelection({ selectedSeats, onSeatsChange, seatStatus }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const [openAlert, setOpenAlert] = useState(false);
+  const [progress, setProgress] = useState(100);
+
+  useEffect(() => {
+    let timer;
+    if (openAlert) {
+      setProgress(100);
+      const duration = 3000; // 3 giây
+      const interval = 50; // Cập nhật mỗi 50ms để animation mượt hơn
+      const step = (100 * interval) / duration;
+
+      timer = setInterval(() => {
+        setProgress((prevProgress) => {
+          const newProgress = prevProgress - step;
+          if (newProgress <= 0) {
+            clearInterval(timer);
+            setTimeout(() => {
+              setOpenAlert(false);
+            }, 100);
+            return 0;
+          }
+          return newProgress;
+        });
+      }, interval);
+    }
+
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+      setProgress(100);
+    };
+  }, [openAlert]);
+
+  const handleCloseAlert = () => {
+    setProgress(0);
+    setTimeout(() => {
+      setOpenAlert(false);
+    }, 100);
+  };
 
   const getSeatSize = () => {
     if (isMobile) return 18;
@@ -137,7 +177,7 @@ function SeatSelection({ selectedSeats, onSeatsChange, seatStatus }) {
     const isSelected = selectedSeats.some(s => s.number === seat.number);
     
     if (!isSelected && selectedSeats.length >= MAX_SEATS) {
-      // Có thể thêm thông báo lỗi ở đây
+      setOpenAlert(true);
       return;
     }
     
@@ -257,8 +297,11 @@ function SeatSelection({ selectedSeats, onSeatsChange, seatStatus }) {
                       color: seatColor,
                       cursor: isBooked ? 'not-allowed' : 'pointer',
                       '&:hover': {
-                        color: isBooked ? seatColor : SEAT_COLORS.SELECTED
+                        '@media (hover: hover)': {
+                          color: isBooked ? seatColor : SEAT_COLORS.SELECTED
+                        }
                       },
+                      WebkitTapHighlightColor: 'transparent',
                       fontSize: isLastRow ? coupleSeatSize : seatSize,
                       ...(seatType === SEAT_TYPES.VIP && {
                         transform: 'scale(1.1)',
@@ -303,8 +346,11 @@ function SeatSelection({ selectedSeats, onSeatsChange, seatStatus }) {
                       color: seatColor,
                       cursor: isBooked ? 'not-allowed' : 'pointer',
                       '&:hover': {
-                        color: isBooked ? seatColor : SEAT_COLORS.SELECTED
+                        '@media (hover: hover)': {
+                          color: isBooked ? seatColor : SEAT_COLORS.SELECTED
+                        }
                       },
+                      WebkitTapHighlightColor: 'transparent',
                       fontSize: isLastRow ? coupleSeatSize : seatSize,
                       ...(seatType === SEAT_TYPES.VIP && {
                         transform: 'scale(1.1)',
@@ -334,6 +380,37 @@ function SeatSelection({ selectedSeats, onSeatsChange, seatStatus }) {
         }
       }}>
       </Box>
+
+      <Snackbar
+        open={openAlert}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        TransitionProps={{
+          onExited: () => setProgress(100)
+        }}
+      >
+        <Box sx={{ width: '100%' }}>
+          <Alert 
+            onClose={handleCloseAlert}
+            severity="warning" 
+            sx={{ width: '100%', mb: 0.5 }}
+          >
+            Bạn chỉ có thể chọn tối đa {MAX_SEATS} ghế
+          </Alert>
+          <LinearProgress 
+            variant="determinate" 
+            value={progress} 
+            sx={{ 
+              height: 2,
+              backgroundColor: 'rgba(255, 152, 0, 0.3)',
+              '& .MuiLinearProgress-bar': {
+                backgroundColor: '#ff9800',
+                transition: 'transform 0.05s linear'
+              }
+            }} 
+          />
+        </Box>
+      </Snackbar>
     </Box>
   );
 }

@@ -96,7 +96,26 @@ const styles = {
     fontSize: '16px',
     fontWeight: 600,
     letterSpacing: '0.5px'
-  }
+  },
+  appBar: (trigger) => ({
+    top: 0,
+    backgroundColor: '#fdfcf0',
+    boxShadow: trigger ? 1 : 0,
+    borderBottom: '1px solid',
+    borderColor: 'divider',
+    zIndex: (theme) => theme.zIndex.drawer + 1,
+    animation: trigger ? 'stuckMoveDown 0.6s' : 'none',
+    '@keyframes stuckMoveDown': {
+      '0%': {
+        transform: 'translateY(-100%)',
+        opacity: 0
+      },
+      '100%': {
+        transform: 'translateY(0)',
+        opacity: 1
+      }
+    }
+  })
 };
 
 function Header() {
@@ -169,14 +188,7 @@ function Header() {
         <AppBar 
           position="sticky"
           color="default"
-          sx={{
-            top: 0,
-            backgroundColor: '#fdfcf0',
-            boxShadow: trigger ? 1 : 0,
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-          }}
+          sx={styles.appBar(trigger)}
         >
           <Container maxWidth="xl">
             <Toolbar 

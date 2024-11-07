@@ -3,6 +3,14 @@
 ## Mô Tả Dự Án
 Mục Tiêu: Xây dựng một trang web cho phép người dùng dễ dàng tìm kiếm, chọn phim, và đặt vé xem phim tại các rạp CGV.
 
+## Công nghệ sử dụng
+
+* [![React][React.js]][React-url]
+* [![React Router][React-Router]][React-Router-url]
+* [![Material UI][Material-UI]][Material-url]
+* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
+* [![Vite][Vite]][Vite-url]
+
 ## Deploy
 Link:
 
@@ -100,3 +108,16 @@ my-react-app/
 └── README.md                 # Tài liệu mô tả dự án
 
 ```
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Material-UI]: https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white
+[Material-url]: https://mui.com/
+[React-Router]: https://img.shields.io/badge/React-Router-007BFF?style=for-the-badge&logo=react-router&logoColor=white
+[React-Router-url]: https://reactrouter.com/
+[Vite]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[Vite-url]: https://vitejs.dev/
+[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
+[Bootstrap-url]: https://getbootstrap.com/
