@@ -6,6 +6,7 @@ import MovieInfo from '../../components/Movie/Ticket/MovieInfo';
 import SeatSelection from '../../components/Movie/Ticket/SeatSelection';
 import TicketSummary from '../../components/Movie/Ticket/TicketSummary';
 import PaymentMethod from '../../components/Movie/Ticket/PaymentMethod';
+import { fakeDataManager } from '../../utils/fakeDataManager';
 
 const SEAT_PRICES = {
   NORMAL: 90000,
@@ -33,9 +34,8 @@ function Ticket() {
     return <Navigate to="/" replace />;
   }
 
-  // Tách phần fetch data ra một useEffect riêng
   useEffect(() => {
-    let mounted = true;
+    let mounted = true; // Để kiểm tra xem component còn mounted không
 
     const fetchSeatStatus = async () => {
       try {
@@ -46,6 +46,10 @@ function Ticket() {
         }
       } catch (error) {
         console.error('Error fetching seat status:', error);
+        if (mounted) {
+          const fakeResponse = fakeDataManager.getSeatStatus([]);
+          setSeatStatus(fakeResponse[0].bookedSeats);
+        }
       } finally {
         if (mounted) {
           setLoading(false);

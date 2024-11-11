@@ -6,6 +6,7 @@ import { getMovieShowtimes } from '../../../api/movieService';
 import MovieCalendar from './MovieCalendar';
 import ShowtimeList from './ShowtimeList';
 import { useLocation } from '../../../contexts/LocationContext';
+import { fakeDataManager } from '../../../utils/fakeDataManager';
 
 function ShowtimeSchedule({ movieData }) {
   const { location } = useLocation();
@@ -30,7 +31,8 @@ function ShowtimeSchedule({ movieData }) {
       );
       
       if (!response || !response[0]?.cinemas) {
-        throw new Error('Không có dữ liệu lịch chiếu');
+        setShowtimes(fakeDataManager.getShowtimes([]));
+        return;
       }
 
       const formattedShowtimes = response[0].cinemas.map(cinema => ({
@@ -58,9 +60,8 @@ function ShowtimeSchedule({ movieData }) {
 
       setShowtimes(formattedShowtimes);
     } catch (err) {
-      setError('Không có suất chiếu nào. Vui lòng chọn ngày khác.');
-      setShowtimes([]);
       console.error('Error fetching showtimes:', err);
+      setShowtimes(fakeDataManager.getShowtimes([]));
     } finally {
       setLoading(false);
     }
