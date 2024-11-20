@@ -82,16 +82,16 @@ function ShowtimeSchedule({ movieData }) {
       state: {
         movie: movieData,
         cinema: {
-          id: cinema.idcinemas,
+          idcinemas: cinema.idcinemas,
           name: cinema.name,
           address: cinema.address
         },
         hall: {
-          id: hall.idhalls,
+          idhalls: hall.idhalls,
           name: hall.name
         },
         showtime: {
-          id: showtime.idshowtimes,
+          idshowtimes: showtime.idshowtimes,
           time: showtime.start_time,
           date: selectedDate.format('YYYY-MM-DD')
         }

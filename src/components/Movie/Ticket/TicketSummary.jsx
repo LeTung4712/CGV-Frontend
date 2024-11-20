@@ -126,7 +126,28 @@ function TicketSummary({
 
   const handleConfirmPayment = () => {
     setOpenConfirm(false);
-    navigate('/payment');
+    
+    // Nhóm ghế theo loại
+    const seatsByType = selectedSeats.reduce((acc, seat) => {
+      if (!acc[seat.type]) {
+        acc[seat.type] = [];
+      }
+      acc[seat.type].push(seat.number);
+      return acc;
+    }, {});
+
+    navigate('/payment', { 
+      state: {  
+        totalAmount, 
+        selectedPaymentMethod,
+        cinemaInfo, 
+        hallInfo, 
+        showtimeInfo, 
+        movieInfo,
+        seatsByType
+      } 
+    });
+
   };
 
   const handleBackToMovie = () => {
