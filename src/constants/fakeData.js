@@ -67,7 +67,7 @@ export const fakeMovies = [
     image_url:
       "https://bhdstar.vn/wp-content/uploads/2024/11/referenceSchemeHeadOfficeallowPlaceHoldertrueheight700ldapp-14.jpg",
     rated:
-      "K - Phim được phổ biến đến người xem dư��i 13 tuổi với điều kiện xem cùng cha, mẹ hoặc người giám hộ",
+      "K - Phim được phổ biến đến người xem dưi 13 tuổi với điều kiện xem cùng cha, mẹ hoặc người giám hộ",
     trailer: "https://www.youtube.com/watch?v=2T_mKyH17mY",
   },
   {
@@ -119,6 +119,52 @@ export const fakeShowtimes = [
       {
         idhalls: 1,
         name: "Cinema 01",
+        showtimes: [
+          {
+            idshowtimes: 1,
+            start_time: "10:15",
+            end_time: "12:15",
+            seatsAvailable: 45,
+            isAlmostFull: false,
+            isSoldOut: false,
+          },
+          {
+            idshowtimes: 2,
+            start_time: "13:15",
+            end_time: "15:15",
+            seatsAvailable: 45,
+            isAlmostFull: false,
+            isSoldOut: false,
+          },
+          {
+            idshowtimes: 3,
+            start_time: "16:15",
+            end_time: "18:15",
+            seatsAvailable: 45,
+            isAlmostFull: false,
+            isSoldOut: false,
+          },
+          {
+            idshowtimes: 4,
+            start_time: "19:15",
+            end_time: "21:15",
+            seatsAvailable: 45,
+            isAlmostFull: false,
+            isSoldOut: false,
+          },
+          {
+            idshowtimes: 5,
+            start_time: "22:15",
+            end_time: "24:15",
+            seatsAvailable: 45,
+            isAlmostFull: false,
+            isSoldOut: false,
+          },
+        ],
+      },
+      {
+        idhalls: 2,
+        name: "Cinema 02",
         showtimes: [
           {
             idshowtimes: 1,
@@ -224,3 +270,23 @@ export const fakeSeatStatus = [
     bookedSeats: ["A2", "A3", "B3", "D5", "D6", "E1", "F4", "I0-1", "I4-5"],
   }
 ];
+
+export const fakePayment = [
+  {
+    order_code : "CGV23112013361912",  
+    payUrl : "https://test-payment.momo.vn/v2/gateway/pay?t=TU9NT1NKSTEyMDE5MDgyM3wxNjEyODQwNTMyNDI3OjAxMjM0NTY3Nzg="
+  }
+];
+
+export const fakePaymentCallback = {
+    order_code: "",
+    status: "success",
+    message: "Giao dịch thành công",
+    amount: 50000,
+    payment_method: "momo",
+    transaction_id: "2321321321",
+    payment_time: new Date().toISOString()
+};
+
+// Thêm delay time cho fake callback
+export const FAKE_CALLBACK_DELAY = 3000; // 3 seconds

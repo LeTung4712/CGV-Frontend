@@ -40,7 +40,7 @@ function Ticket() {
     const fetchSeatStatus = async () => {
       try {
         setLoading(true);
-        const response = await getSeatStatus(ticketData?.showtime?.id);
+        const response = await getSeatStatus(ticketData?.showtime?.idshowtimes);
         if (mounted) {
           setSeatStatus(response[0].bookedSeats);
         }
@@ -57,14 +57,14 @@ function Ticket() {
       }
     };
 
-    if (ticketData?.showtime?.id) {
+    if (ticketData?.showtime?.idshowtimes) {
       fetchSeatStatus();
     }
 
     return () => {
       mounted = false;
     };
-  }, [ticketData?.showtime?.id]);
+  }, [ticketData?.showtime?.idshowtimes]);
 
   // Xử lý scroll sau khi load
   useEffect(() => {

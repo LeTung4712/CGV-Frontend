@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import Home from "../pages/Home/Home";
 import DetailMovie from "../pages/Movie/DetailMovie";
 import Ticket from "../pages/Movie/Ticket";
+import PaymentPage from "../pages/Payment/PaymentPage";
 //import Test from '../pages/Home/test';
 import Login from "../pages/Auth/Login/Login"
 import Register from "../pages/Auth/Register/Register";
@@ -21,6 +22,7 @@ export const routes = [
       { path: ROUTE.TICKET, element: <Ticket /> },
       { path: ROUTE.LOGIN, element: <Login/>},
       { path: ROUTE.REGISTER, element: <Register/>},
+      { path: ROUTE.AUTH_PAYMENT, element: <PaymentPage />}
     ],
   },
   {
