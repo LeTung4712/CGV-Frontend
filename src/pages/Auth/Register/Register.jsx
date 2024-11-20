@@ -1,176 +1,165 @@
-import React from "react";
-import { useState } from "react";
-import "./style.css";
-import { Alert } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Box,
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+} from "@mui/material";
 
-function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [flag, setFlag] = useState(false);
-  const [err, setErr] = useState(false);
-
-  const submitForm = (e) => {
-    e.preventDefault();
-    const data = {
-      name: name,
-      email: email,
-      phone: phone,
-      password: password,
-      confirmPassword: confirmPassword,
-    };
-
-    if (!name || !email || !password || !phone || !confirmPassword) {
-      setFlag(true);
-      return;
-    }
-    if (password !== confirmPassword) {
-      setErr(true);
-      return;
-    }
-
-    else {
-      fetch("http://localhost:3001/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === "error") {
-            alert("Dang ky that bai");
-            console.log(data);
-            return;
-          }
-          console.log(JSON.stringify(data));
-          alert("Dang ky thanh cong");
-          window.location.href = "/login";
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
+export default function RegisterPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "", 
+    create_at: "",
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    if (id === "name") {
-      setName(value);
-    }
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-    if (id === "email") {
-      setEmail(value);
-    }
-    if (id === "password") {
-      setPassword(value);
-    }
-    if (id === "confirmPassword") {
-      setConfirmPassword(value);
-    }
-    if (id === "phone") {
-      setPhone(value);
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setIsLoading(true);
+
+    // Thêm thời gian hiện tại vào formData
+    const create_at = new Date().toISOString();
+
+    try {
+      // Kiểm tra xác nhận mật khẩu
+      if (formData.password !== formData.confirmPassword) {
+        throw new Error("Mật khẩu và xác nhận mật khẩu không khớp!");
+      }
+
+      // Thêm một số validate cơ bản
+      if (!formData.email.includes("@")) {
+        throw new Error("Email không hợp lệ!");
+      }
+      if (formData.phone.length < 10) {
+        throw new Error("Số điện thoại không hợp lệ!");
+      }
+
+      // Giả lập gửi dữ liệu đến API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Xử lý thành công
+      setFormData({ name: "", email: "", phone: "", password: "", confirmPassword: "", create_at: "" });
+      setSuccess("Đăng ký thành công!");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <div className="form">
-        <div className="form-body" id="body_f">
-          <form onSubmit={submitForm}>
-            <h3>ĐĂNG KÝ</h3>
-            <div className="username">
-              <label className="form__label" htmlFor="name">
-                Tên{" "}
-              </label>
-              <input
-                className="form__input"
-                type="text"
-                value={name}
-                onChange={(e) => handleInputChange(e)}
-                id="name"
-                placeholder="Tên"
-              />
-            </div>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#f5f5f5",
+      }}
+    >
+      <Container maxWidth="xs">
+        <Box
+          component="form"
+          onSubmit={handleRegister}
+          sx={{
+            p: 3,
+            borderRadius: 2,
+            boxShadow: 3,
+            backgroundColor: "white",
+          }}
+        >
+          <Typography variant="h5" sx={{ mb: 2, textAlign: "center" }}>
+            Đăng Ký
+          </Typography>
 
-            <div className="email">
-              <label className="form__label" htmlFor="email">
-                Email{" "}
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="form__input"
-                value={email}
-                onChange={(e) => handleInputChange(e)}
-                placeholder="Email"
-              />
-            </div>
-            <div className="phone">
-              <label className="form__label" htmlFor="phone">
-                Số điện thoại
-              </label>
-              <input
-                type="phone"
-                id="phone"
-                className="form__input"
-                value={phone}
-                onChange={(e) => handleInputChange(e)}
-                placeholder="Số điện thoại"
-              />
-            </div>
-
-            <div className="password">
-              <label className="form__label" htmlFor="password">
-                Mật Khẩu{" "}
-              </label>
-              <input
-                className="form__input"
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => handleInputChange(e)}
-                placeholder="Mật Khẩu"
-              />
-            </div>
-            <div className="confirm-password">
-              <label className="form__label" htmlFor="confirmPassword">
-                Xác nhận lại mật khẩu
-              </label>
-              <input
-                className="form__input"
-                type="password"
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => handleInputChange(e)}
-                placeholder="Xác nhận lại mật khẩu"
-              />
-            </div>
-            <button
-              // onClick={() => handleSubmit()}
-              type="submit"
-              className="btn"
-            >
-              ĐĂNG KÝ
-            </button>
-          </form>
-          {flag && (
-            <Alert color="primary" variant="danger">
-              Hãy điền đầy đủ thông tin
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
             </Alert>
           )}
-          {err && (
-            <Alert color="primary" variant="danger">
-              Mật khẩu không khớp
+          {success && (
+            <Alert severity="success" sx={{ mb: 2 }}>
+              {success}
             </Alert>
           )}
-        </div>
-      </div>
-    </>
+
+          <TextField
+            label="Họ và tên"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Số điện thoại"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Mật khẩu"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Xác nhận mật khẩu"
+            name="confirmPassword"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={isLoading}
+          >
+            {isLoading ? "Đang đăng ký..." : "Đăng ký"}
+          </Button>
+        </Box>
+      </Container>
+    </Box>
   );
 }
-
-export default Register;
