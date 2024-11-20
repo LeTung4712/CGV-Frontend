@@ -4,6 +4,8 @@ import Home from "../pages/Home/Home";
 import DetailMovie from "../pages/Movie/DetailMovie";
 import Ticket from "../pages/Movie/Ticket";
 //import Test from '../pages/Home/test';
+import Login from "../pages/Auth/Login/Login"
+import Register from "../pages/Auth/Register/Register";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 
@@ -17,6 +19,8 @@ export const routes = [
       { path: ROUTE.HOME, element: <Home /> },
       { path: ROUTE.MOVIE_DETAIL, element: <DetailMovie /> },
       { path: ROUTE.TICKET, element: <Ticket /> },
+      { path: ROUTE.LOGIN, element: <Login/>},
+      { path: ROUTE.REGISTER, element: <Register/>},
     ],
   },
   {
