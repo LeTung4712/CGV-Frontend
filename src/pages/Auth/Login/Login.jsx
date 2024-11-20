@@ -1,134 +1,103 @@
-import { useState } from "react";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./login.css";
+import React, { useState } from "react";
+import { Box, Container, TextField, Button, Typography, Alert } from "@mui/material";
+import { Link } from "react-router-dom"; // Nếu bạn đang dùng react-router-dom
 
-function Login() {
-  //set state for email and password
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const setChangeEmail = (e) => {
-    setEmail(e.target.value);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Ngăn chặn hành động mặc định khi submit form
+    setError("");
+    setIsLoading(true);
+
+    try {
+      // Giả lập gọi API đăng nhập
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Kiểm tra email và mật khẩu (demo)
+      if (email === "test@example.com" && password === "123456") {
+        alert("Đăng nhập thành công!");
+      } else {
+        setError("Email hoặc mật khẩu không đúng!");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Đã xảy ra lỗi, vui lòng thử lại!");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const setChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  //login with fetch api
-  const login = (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      alert("Please enter email and password");
-      return;
-    }
-    fetch("http://localhost:3001/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "success") {
-          alert("login success");
-          window.localStorage.setItem("token", JSON.stringify(data.data));
-          navigate(-1);
-        }
-        else {
-          alert(data.message);
-        }
-      });
-  };
-  const user = JSON.parse(localStorage.getItem("token"));
-  const navigate = useNavigate();
-  React.useEffect(() => {
-    if (user) {
-      navigate("/profile");
-    }
-  }, [user, navigate]);
   return (
-    <div className="container">
-      <div className="row" style={{ display: "block" }}>
-        <div className="col-md-6 offset-md-3">
-          <div className="card">
-            <div
-              className="card-header"
-              style={{ display: "flex", textAlign: "center", padding: "5px" }}
-            >
-              <h5 style={{ flex: "1", margin: "7px" }}>ĐĂNG NHẬP</h5>
-            </div>
-            <div className="card-body">
-              <form onSubmit={login}>
-                <div className="form-group">
-                  <label htmlFor="email">
-                    <h6 style={{ margin: "12px 0 10px 0" }}>
-                      Email hoặc số điện thoại
-                    </h6>
-                  </label>
-                  <input
-                    style={{ fontSize: "11px" }}
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    placeholder="Email hoặc số điện thoại"
-                    value={email}
-                    onChange={setChangeEmail}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password">
-                    <h6 style={{ margin: "12px 0 10px 0" }}>Mật khẩu</h6>
-                  </label>
-                  <input
-                    style={{
-                      fontSize: "11px",
-                      width: "100%"
-                    }}
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    placeholder="Mật khẩu"
-                    value={password}
-                    onChange={setChangePassword}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  style={{
-                    backgroundColor: "red",
-                    color: "#fff",
-                    width: "100%",
-                    border: "none",
-                    borderRadius: "5px",
-                    padding: "10px",
-                    marginTop: "20px",
-                  }}
-                >
-                  ĐĂNG NHẬP
-                </button>
-              </form>
-            </div>
-            <div
-              className="card-footer"
-              style={{
-                display: "flex",
-                textAlign: "center",
-              }}
-            >
-              <p style={{ flex: "1", margin: "6px" }}>
-                Bạn chưa có tài khoản? <Link to="/register">Đăng ký</Link>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#f5f5f5",
+      }}
+    >
+      <Container maxWidth="xs">
+        <Box
+          component="form"
+          onSubmit={handleLogin}
+          sx={{
+            p: 3,
+            borderRadius: 2,
+            boxShadow: 3,
+            backgroundColor: "white",
+          }}
+        >
+          <Typography variant="h5" sx={{ mb: 2, textAlign: "center" }}>
+            Đăng Nhập
+          </Typography>
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
+          <TextField
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Mật khẩu"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={isLoading}
+          >
+            {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+          </Button>
+
+          <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
+            Chưa có tài khoản?{" "}
+            <Link to="/register" style={{ textDecoration: "none", color: "#1976d2" }}>
+              Đăng ký
+            </Link>
+          </Typography>
+        </Box>
+      </Container>
+    </Box>
   );
 }
-export default Login;
-//note test
