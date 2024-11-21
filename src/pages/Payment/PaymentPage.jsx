@@ -120,7 +120,7 @@ function PaymentPage() {
             idcinemas: paymentData.cinemaInfo.idcinemas,
             idhalls: paymentData.hallInfo.idhalls,
             idshowtimes: paymentData.showtimeInfo.idshowtimes,
-            idmovies: paymentData.movieInfo.name,
+            movie: paymentData.movieInfo.name,
             seatsByType: paymentData.seatsByType,
           };
 
