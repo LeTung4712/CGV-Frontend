@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { registerUser } from "../../../api/userService";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Container,
@@ -20,6 +22,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +40,7 @@ export default function RegisterPage() {
 
     // Thêm thời gian hiện tại vào formData
     const create_at = new Date().toISOString();
+    const userData = { ...formData, create_at };
 
     try {
       // Kiểm tra xác nhận mật khẩu
@@ -52,14 +56,21 @@ export default function RegisterPage() {
         throw new Error("Số điện thoại không hợp lệ!");
       }
 
-      // Giả lập gửi dữ liệu đến API
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+       const result = await registerUser(userData);
 
-      // Xử lý thành công
-      setFormData({ name: "", email: "", phone: "", password: "", confirmPassword: "", create_at: "" });
-      setSuccess("Đăng ký thành công!");
+
+      setSuccess(result.message || "Đăng ký thành công!");
+      navigate("/login");
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+        create_at: "",
+      });
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Đã xảy ra lỗi, vui lòng thử lại!");
     } finally {
       setIsLoading(false);
     }
