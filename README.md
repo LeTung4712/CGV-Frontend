@@ -12,7 +12,7 @@ Mục Tiêu: Xây dựng một trang web cho phép người dùng dễ dàng tì
 * [![Vite][Vite]][Vite-url]
 
 ## Deploy
-Link:
+Link: https://movie-ticket-booking-app-2024.web.app
 
 ## Các Tính Năng Chính
 1. Trang Chính:
