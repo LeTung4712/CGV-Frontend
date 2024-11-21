@@ -5,9 +5,11 @@ import DetailMovie from "../pages/Movie/DetailMovie";
 import Ticket from "../pages/Movie/Ticket";
 //import Test from '../pages/Home/test';
 import Login from "../pages/Auth/Login/Login"
+import Logout from "../pages/Auth/logout/logout";
 import Register from "../pages/Auth/Register/Register";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
+import { RouteRounded } from "@mui/icons-material";
 
 
 export const routes = [
@@ -21,6 +23,7 @@ export const routes = [
       { path: ROUTE.TICKET, element: <Ticket /> },
       { path: ROUTE.LOGIN, element: <Login/>},
       { path: ROUTE.REGISTER, element: <Register/>},
+      { path: ROUTE.LOGOUT, element: <Logout/>},
     ],
   },
   {
