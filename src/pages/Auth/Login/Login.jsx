@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Box, Container, TextField, Button, Typography, Alert } from "@mui/material";
-import { Link } from "react-router-dom"; // Nếu bạn đang dùng react-router-dom
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../../../api/userService";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Ngăn chặn hành động mặc định khi submit form
@@ -14,18 +16,13 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Giả lập gọi API đăng nhập
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+       const response = await loginUser(email, password);
 
-      // Kiểm tra email và mật khẩu (demo)
-      if (email === "test@example.com" && password === "123456") {
-        alert("Đăng nhập thành công!");
-      } else {
-        setError("Email hoặc mật khẩu không đúng!");
-      }
+       localStorage.setItem("token", response.token); // Lưu token vào localStorage
+
+      navigate("/");
     } catch (err) {
-      console.error(err);
-      setError("Đã xảy ra lỗi, vui lòng thử lại!");
+      setError(err.message); // Hiển thị thông báo lỗi nếu có
     } finally {
       setIsLoading(false);
     }
