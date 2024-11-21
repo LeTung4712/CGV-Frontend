@@ -8,6 +8,7 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    environment: Production
     
     steps:
       - uses: actions/checkout@v4
@@ -19,6 +20,11 @@ jobs:
           
       - name: Install dependencies
         run: npm install
+        
+      - name: Create .env file
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
+          echo "VITE_USE_FAKE_DATA=${{ secrets.VITE_USE_FAKE_DATA }}" >> .env
         
       - name: Build
         run: npm run build
