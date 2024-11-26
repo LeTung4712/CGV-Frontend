@@ -30,11 +30,6 @@ function ShowtimeSchedule({ movieData }) {
         formattedDate
       );
       
-      if (!response || !response[0]?.cinemas) {
-        setShowtimes(fakeDataManager.getShowtimes([]));
-        return;
-      }
-
       const formattedShowtimes = response[0].cinemas.map(cinema => ({
         idcinemas: cinema.idcinemas,
         name: cinema.name,
@@ -58,7 +53,7 @@ function ShowtimeSchedule({ movieData }) {
         })).filter(hall => hall.showtimes.length > 0)
       })).filter(cinema => cinema.hall.length > 0);
 
-      setShowtimes(formattedShowtimes);
+      setShowtimes(fakeDataManager.getShowtimes(formattedShowtimes));
     } catch (err) {
       console.error('Error fetching showtimes:', err);
       setShowtimes(fakeDataManager.getShowtimes([]));

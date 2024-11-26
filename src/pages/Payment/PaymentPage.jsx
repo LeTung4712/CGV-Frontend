@@ -10,6 +10,7 @@ import { fakeDataManager } from "../../utils/fakeDataManager";
 function PaymentPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [payUrl, setPayUrl] = useState(null);
   const [searchParams] = useSearchParams();
   const [paymentResult, setPaymentResult] = useState(null);
 
@@ -109,58 +110,67 @@ function PaymentPage() {
     // Xử lý thanh toán mới
     else if (paymentData) {
       const processPayment = async () => {
-        try {
-          const dataPayment = {
-            amount: paymentData.totalAmount,
-            paymentMethod: paymentData.selectedPaymentMethod,
-            returnUrl: `${window.location.origin}/payment`,
-            //http://localhost:5173/payment?partnerCode=MOMOXYZ2024&accessKey=ABCD1234&requestId=REQ0011223344&orderId=CGV23112013361912&errorCode=0&message=Success&amount=50000&responseTime=2024-11-21T12%3A34%3A56.789Z&payType=qr
-            //http://localhost:5173/payment?partnerCode=MOMOXYZ2024&accessKey=ABCD1234&requestId=REQ0011223344&orderId=CGV23112013361912&errorCode=49&message=Transaction+declined&amount=50000&responseTime=2024-11-21T12%3A34%3A56.789Z&payType=qr
-            idcustomers: customerInfo.idcustomers,
-            idcinemas: paymentData.cinemaInfo.idcinemas,
-            idhalls: paymentData.hallInfo.idhalls,
-            idshowtimes: paymentData.showtimeInfo.idshowtimes,
-            movie: paymentData.movieInfo.name,
-            seatsByType: paymentData.seatsByType,
-          };
+        // 1. Validate data
+        const dataPayment = {
+          amount: paymentData.totalAmount,
+          paymentMethod: paymentData.selectedPaymentMethod,
+          returnUrl: `${window.location.origin}/payment`,
+          idcustomers: customerInfo.idcustomers,
+          idcinemas: paymentData.cinemaInfo.idcinemas,
+          idhalls: paymentData.hallInfo.idhalls,
+          idshowtimes: paymentData.showtimeInfo.idshowtimes,
+          movie: paymentData.movieInfo.name,
+          seatsByType: paymentData.seatsByType,
+        };
 
-          // gọi API 
-          let response;
+        // 2. Gọi API payment tương ứng
+        const callPaymentAPI = async () => {
+          switch (dataPayment.paymentMethod) {
+            case "momo":
+              return await createPaymentMomo(dataPayment);
+            case "zalopay":
+              return await createPaymentZalopay(dataPayment);
+            case "vnpay":
+              return await createPaymentVNpay(dataPayment);
+            default:
+              throw new Error("Phương thức thanh toán không hợp lệ");
+          }
+        };
+
+        try {
+          // 3. Xử lý response và lấy payUrl
+          let payUrl;
           try {
-            switch (paymentData.selectedPaymentMethod) {
-              case "momo":
-                response = await createPaymentMomo(dataPayment);
-                break;
-              case "zalopay":
-                response = await createPaymentZalopay(dataPayment);
-                break;
-              case "vnpay":
-                response = await createPaymentVNpay(dataPayment);
-                break;
-              default:
-                throw new Error("Phương thức thanh toán không hợp lệ");
-            }
+            const response = await callPaymentAPI();
+            payUrl = fakeDataManager.getPayUrl([response?.data?.payUrl])[0].payUrl;
           } catch (apiError) {
             console.error("API call failed:", apiError);
-            
+            payUrl = fakeDataManager.getPayUrl([])[0].payUrl;
           }
+          // 4. Set state và return payUrl
+          setPayUrl(payUrl);
+          return payUrl;
 
-          // Nếu API thất bại, sử dụng fakeDataManager
-          const payUrl = fakeDataManager.getPayUrl(response?.payUrl);
-          
-          if (payUrl) {
-            window.location.replace(typeof payUrl === 'string' ? payUrl : payUrl[0].payUrl);
-          } else {
-            throw new Error("Không thể lấy được URL thanh toán");
-          }
-          
         } catch (error) {
           console.error("Lỗi xử lý thanh toán:", error);
+          throw error;
         }
       };
 
-      processPayment();
-    } 
+      // 5. Xử lý payment flow
+      processPayment()
+        .then(payUrl => {
+          if (payUrl) {
+            window.location.replace(payUrl);
+          } else {
+            throw new Error("Không lấy được URL thanh toán");
+          }
+        })
+        .catch(error => {
+          console.error("Lỗi thanh toán:", error);
+          // Có thể thêm xử lý UI thông báo lỗi ở đây
+        });
+    }
     // Nếu không có payment data và không phải returnUrl, redirect về /ticket
     else {
       navigate('/ticket', { replace: true });
