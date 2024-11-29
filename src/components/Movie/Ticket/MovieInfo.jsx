@@ -46,7 +46,7 @@ function MovieInfo({ movieData }) {
               color: 'primary.main'
             }}
           >
-            {movieData.name}
+            {movieData.title}
           </Typography>
 
           <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>

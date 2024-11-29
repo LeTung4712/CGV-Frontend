@@ -56,9 +56,9 @@ const navigation = {
 };
 
 const locations = [
-  { value: 'hanoi', label: 'Hà Nội' },
-  { value: 'hochiminh', label: 'TP. Hồ Chí Minh' },
-  { value: 'danang', label: 'Đà Nẵng' }
+  { value: 'Hà Nội', label: 'Hà Nội' },
+  { value: 'TP. Hồ Chí Minh', label: 'TP. Hồ Chí Minh' },
+  { value: 'Đà Nẵng', label: 'Đà Nẵng' }
 ];
 
 const styles = {

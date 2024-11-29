@@ -180,7 +180,7 @@ function TicketSummary({
               fontSize: { xs: '1.5rem', md: '1.7rem' }
             }}
           >
-            {movieInfo?.name}
+            {movieInfo?.title}
           </Typography>
           <Typography 
             variant="h5" 

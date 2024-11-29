@@ -18,6 +18,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import LanguageIcon from '@mui/icons-material/Language';
+import dayjs from 'dayjs';
 
 const MoviePoster = styled('img')(({ theme }) => ({
   width: '100%',
@@ -101,7 +102,7 @@ const BookingButton = styled(Button)(({ theme }) => ({
 function MovieInfo({ movieData }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const videoUrl = movieData.trailer?.replace("watch?v=", "embed/");
+  const videoUrl = movieData.trailer_url?.replace("watch?v=", "embed/");
 
   const scrollToShowtimes = () => {
     const showtimesElement = document.getElementById('showtimes-section');
@@ -158,7 +159,7 @@ function MovieInfo({ movieData }) {
                     fontSize: { xs: '1.5rem', md: '2rem' }
                   }}
                 >
-                  {movieData.name}
+                  {movieData.title}
                 </Typography>
 
                 <Box sx={{ position: 'relative' }}>
@@ -242,7 +243,7 @@ function MovieInfo({ movieData }) {
                     <InfoItem>
                       <CalendarMonthIcon />
                       <Typography>
-                        <strong>Khởi chiếu:</strong> {movieData.release_date}
+                        <strong>Khởi chiếu:</strong> {dayjs(movieData.release_date).format('DD/MM/YYYY')}
                       </Typography>
                     </InfoItem>
 
@@ -297,7 +298,7 @@ function MovieInfo({ movieData }) {
             </Grid>
 
             {/* Phần trailer */}
-            {movieData.trailer && (
+            {movieData.trailer_url && (
               <Grid item xs={12}>
                 <GlassPaper 
                   elevation={0} 
@@ -333,7 +334,7 @@ function MovieInfo({ movieData }) {
                     <iframe
                       src={videoUrl}
                       allowFullScreen
-                      title={movieData.name}
+                      title={movieData.title}
                       frameBorder="0"
                     />
                   </Box>

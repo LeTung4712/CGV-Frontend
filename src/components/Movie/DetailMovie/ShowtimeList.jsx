@@ -80,7 +80,7 @@ function ShowtimeList({
       }
     }}>
       {showtimes.map((cinema) => (
-        <Paper key={cinema.idcinemas} sx={{ mb: 3, p: 2 }}>
+        <Paper key={cinema.idcinema} sx={{ mb: 3, p: 2 }}>
           <Box sx={{ mb: 2 }}>
             <Typography variant="h6" sx={{ color: 'primary.main', mb: 1 }}>
               {cinema.name}
@@ -96,7 +96,7 @@ function ShowtimeList({
           
           <Divider sx={{ mb: 2 }} />
           
-          {cinema.hall.map((hall) => (
+          {cinema.halls.map((hall) => (
             <Box key={hall.idhalls} sx={{ mb: 3 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1.5 }}>
                 {hall.name}

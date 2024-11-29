@@ -39,7 +39,7 @@ export const getMovieShowtimes = async (movieId, location, date) => {
 
 export const getSeatStatus = async (showtimeId) => {
     try {
-        const response = await apiClient.get(`${PREFIX}/seatstatus?idshowtimes=${showtimeId}`);
+        const response = await apiClient.get(`${PREFIX}/showtimes/${showtimeId}/seatstatus`);
         return response.data;
     } catch (error) {
         throw error;

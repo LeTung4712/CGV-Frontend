@@ -36,11 +36,12 @@ function Ticket() {
 
   useEffect(() => {
     let mounted = true; // Để kiểm tra xem component còn mounted không
-
+    console.log('ticketData', ticketData);
     const fetchSeatStatus = async () => {
       try {
         setLoading(true);
-        const response = await getSeatStatus(ticketData?.showtime?.idshowtimes);
+        const response = await getSeatStatus(ticketData?.showtime?.idshowtime);
+        console.log('response ticket', response);
         if (mounted) {
           setSeatStatus(fakeDataManager.getSeatStatus(response.data.bookedSeats));
         }
@@ -56,14 +57,14 @@ function Ticket() {
       }
     };
 
-    if (ticketData?.showtime?.idshowtimes) {
+    if (ticketData?.showtime?.idshowtime) {
       fetchSeatStatus();
     }
 
     return () => {
       mounted = false;
     };
-  }, [ticketData?.showtime?.idshowtimes]);
+  }, [ticketData?.showtime?.idshowtime]);
 
   // Xử lý scroll sau khi load
   useEffect(() => {
