@@ -25,7 +25,7 @@ export default function Home() {
         setError(null);
         const res = await getMoviesNowShowing();
         if (isMounted) {
-          setMovies(res);
+          setMovies(res.data);
         }
       } catch (error) {
         console.error("Failed to fetch movies:", error);

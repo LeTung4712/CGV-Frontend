@@ -161,7 +161,7 @@ export default function MovieCard({ movie }) {
                   color: 'primary.main'
                 }}
               >
-                {movie.name}
+                {movie.title}
               </Typography>
             </Tooltip>
             <Typography 
@@ -183,7 +183,7 @@ export default function MovieCard({ movie }) {
       <VideoDialog
         open={isDialogOpen}
         handleClose={handleDialogClose}
-        trailer={movie.trailer?.replace("watch?v=", "embed/")}
+        trailer={movie.trailer_url?.replace("watch?v=", "embed/")}
       />
     </>
   );
