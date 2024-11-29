@@ -9,6 +9,11 @@ function DetailMovie() {
   const { state } = useLocation();
   const [movie] = useState(state);
 
+  //check if movie is undefined or null thì chuyển về trang chủ
+  if (!movie) {
+    window.location.href = "/";
+  }
+
   return (
     <div className="movie-detail-page">
       <MovieInfo movieData={movie} />

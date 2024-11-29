@@ -43,13 +43,12 @@ function Ticket() {
         const response = await getSeatStatus(ticketData?.showtime?.idshowtime);
         console.log('response ticket', response);
         if (mounted) {
-          setSeatStatus(response.data.bookedSeats);
+          setSeatStatus(fakeDataManager.getSeatStatus(response.data.bookedSeats));
         }
       } catch (error) {
         console.error('Error fetching seat status:', error);
         if (mounted) {
-          const fakeResponse = fakeDataManager.getSeatStatus([]);
-          setSeatStatus(fakeResponse[0].bookedSeats);
+          setSeatStatus(fakeDataManager.getSeatStatus([])[0].bookedSeats);
         }
       } finally {
         if (mounted) {
