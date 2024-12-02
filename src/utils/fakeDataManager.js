@@ -1,8 +1,6 @@
-import { fakeMovies, fakeShowtimes, fakeEvents, fakePromotions, fakeSeatStatus } from '../constants/fakeData';
+import { fakeMovies, fakeShowtimes, fakeEvents, fakePromotions, fakeSeatStatus, fakePayment, fakePaymentCallback, FAKE_CALLBACK_DELAY } from '../constants/fakeData';
 
 const useFakeData = import.meta.env.VITE_USE_FAKE_DATA === 'true';
-
-
 
 export const fakeDataManager = {
   getMovies: (realData = []) => {
@@ -23,6 +21,24 @@ export const fakeDataManager = {
   
   getSeatStatus: (realData = []) => {
     return getFakeDataIfEnabled(fakeSeatStatus, realData);
+  },
+  
+  getPayUrl: (realData = []) => {
+    return getFakeDataIfEnabled(fakePayment, realData);
+  },
+  
+  getPaymentCallback: (realData = {}) => {
+    return getFakeDataIfEnabled({
+      ...fakePaymentCallback,
+      order_code: realData.orderCode,
+      amount: realData.amount || fakePaymentCallback.amount,
+      payment_method: realData.paymentMethod || fakePaymentCallback.payment_method,
+      payment_time: new Date().toISOString()
+    }, realData);
+  },
+
+  getCallbackDelay: () => {
+    return FAKE_CALLBACK_DELAY;
   }
 };
 

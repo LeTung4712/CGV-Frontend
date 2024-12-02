@@ -25,22 +25,22 @@ function ShowtimeSchedule({ movieData }) {
       const formattedDate = date.format('YYYY-MM-DD');
       
       const response = await getMovieShowtimes(
-        movieData.idmovies, 
+        movieData.idmovie, 
         location,
         formattedDate
       );
       
-      if (!response || !response[0]?.cinemas) {
+      if (!response || !response.data.cinemas) {
         setShowtimes(fakeDataManager.getShowtimes([]));
         return;
       }
-
-      const formattedShowtimes = response[0].cinemas.map(cinema => ({
-        idcinemas: cinema.idcinemas,
+      console.log("response", response.data.cinemas);
+      const formattedShowtimes = response.data.cinemas.map((cinema) => ({
+        idcinema: cinema.idcinema,
         name: cinema.name,
         address: cinema.address,
-        hall: cinema.halls.map(hall => ({
-          idhalls: hall.idhalls,
+        halls: cinema.halls.map(hall => ({
+          idhall: hall.idhall,
           name: hall.name,
           showtimes: hall.showtimes.filter(showtime => {
             if (date.isSame(now, 'day')) {
@@ -48,19 +48,19 @@ function ShowtimeSchedule({ movieData }) {
             }
             return true;
           }).map(showtime => ({
-            idshowtimes: showtime.idshowtimes,
-            start_time: showtime.start_time,
-            end_time: showtime.end_time,
+            idshowtime: showtime.idshowtime,
+            start_time: dayjs(showtime.start_time).format('HH:mm'),
+            end_time: dayjs(showtime.end_time).format('HH:mm'),
             seatsAvailable: showtime.seatsAvailable,
             isAlmostFull: showtime.isAlmostFull,
             isSoldOut: showtime.isSoldOut
           }))
         })).filter(hall => hall.showtimes.length > 0)
-      })).filter(cinema => cinema.hall.length > 0);
+      })).filter(cinema => cinema.halls.length > 0);
 
-      setShowtimes(formattedShowtimes);
+      setShowtimes(fakeDataManager.getShowtimes(formattedShowtimes));
     } catch (err) {
-      console.error('Error fetching showtimes:', err);
+      console.error("Error fetching showtimes:", err);
       setShowtimes(fakeDataManager.getShowtimes([]));
     } finally {
       setLoading(false);
@@ -69,7 +69,7 @@ function ShowtimeSchedule({ movieData }) {
 
   useEffect(() => {
     fetchShowtimes(selectedDate);
-  }, [selectedDate, movieData.idmovies, location]);
+  }, [selectedDate, movieData.idmovie, location]);
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
@@ -82,16 +82,16 @@ function ShowtimeSchedule({ movieData }) {
       state: {
         movie: movieData,
         cinema: {
-          id: cinema.idcinemas,
+          idcinema: cinema.idcinema,
           name: cinema.name,
           address: cinema.address
         },
         hall: {
-          id: hall.idhalls,
+          idhall: hall.idhall,
           name: hall.name
         },
         showtime: {
-          id: showtime.idshowtimes,
+          idshowtime: showtime.idshowtime,
           time: showtime.start_time,
           date: selectedDate.format('YYYY-MM-DD')
         }

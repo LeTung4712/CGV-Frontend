@@ -113,7 +113,7 @@ export default function MovieSelection({ movies }) {
             }}
           >
             {movies.map((movie) => (
-              <SwiperSlide key={movie.idmovies}>
+              <SwiperSlide key={movie.idmovie}>
                 <MovieCard movie={movie} />
               </SwiperSlide>
             ))}
