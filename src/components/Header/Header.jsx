@@ -145,9 +145,9 @@ function Header() {
 
   useEffect(() => {
     const savedLocation = localStorage.getItem('location');
-    //if (!savedLocation) {
+    if (window.location.pathname === '/') {
       setOpenLocationDialog(true);
-    //}
+    }
   }, []);
 
   const handleLocationChange = (event) => {
@@ -440,6 +440,7 @@ function Header() {
         sx={{
           '& .MuiDialog-paper': {
             backgroundColor: '#fdfcf0',
+            borderRadius: '13px'
           }
         }}
       >
@@ -451,7 +452,7 @@ function Header() {
             color: '#333'
           }}
         >
-          Chọn Vị Trí Của Bạn
+          Chào mừng quý khách đến với LUX CINEMA
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
