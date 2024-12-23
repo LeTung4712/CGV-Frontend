@@ -54,7 +54,7 @@ export default function FailedResult({ paymentStatus }) {
                     fontSize: '1.1rem'
                 }}
             >
-                Thử lại
+                Trở về trang chủ
             </Button>
         </Box>
     );

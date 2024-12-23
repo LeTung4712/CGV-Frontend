@@ -19,7 +19,7 @@ function PaymentPage() {
 
   const paymentData = location.state;
   const customerInfo = {
-    idcustomers: 1,
+    idcustomer: "6745e15e6ed1ebf9126196e2",
     name: "Nguyễn Văn A",
     email: "nguyenvana@gmail.com",
     phone: "0909090909",
@@ -86,7 +86,7 @@ function PaymentPage() {
           });
           return;
         }
-
+//amount=1120000&appid=2553&apptransid=241223_CGV241223211404&bankcode=&checksum=4e75ab1f51a0a46e49564b2d1ed4a9738ad518cf15b37d22bb92829c9dafc682&discountamount=0&pmcid=0&status=-49
         // Xử lý response từ ZaloPay
         const zalopayResult = searchParams.get("status");
         if (zalopayResult) {
@@ -98,7 +98,7 @@ function PaymentPage() {
               amount: parseInt(searchParams.get("amount")),
               payment_method: "ZALOPAY",
               payment_time: new Date().toISOString(),
-              message: searchParams.get("description"),
+              //message: searchParams.get("return_message"),
             },
           });
           return;
@@ -115,11 +115,8 @@ function PaymentPage() {
           amount: paymentData.totalAmount,
           paymentMethod: paymentData.selectedPaymentMethod,
           returnUrl: `${window.location.origin}/payment`,
-          idcustomers: customerInfo.idcustomers,
-          idcinemas: paymentData.cinemaInfo.idcinemas,
-          idhalls: paymentData.hallInfo.idhalls,
-          idshowtimes: paymentData.showtimeInfo.idshowtimes,
-          movie: paymentData.movieInfo.name,
+          idcustomer: customerInfo.idcustomer,
+          idshowtime: paymentData.showtimeInfo.idshowtime,
           seatsByType: paymentData.seatsByType,
         };
 
@@ -142,7 +139,8 @@ function PaymentPage() {
           let payUrl;
           try {
             const response = await callPaymentAPI();
-            payUrl = fakeDataManager.getPayUrl([response?.data?.payUrl])[0].payUrl;
+            //console.log('res', response.data)
+            payUrl = response.data.payUrl
           } catch (apiError) {
             console.error("API call failed:", apiError);
             payUrl = fakeDataManager.getPayUrl([])[0].payUrl;

@@ -34,7 +34,6 @@ function ShowtimeSchedule({ movieData }) {
         setShowtimes(fakeDataManager.getShowtimes([]));
         return;
       }
-      console.log("response", response.data.cinemas);
       const formattedShowtimes = response.data.cinemas.map((cinema) => ({
         idcinema: cinema.idcinema,
         name: cinema.name,

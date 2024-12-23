@@ -74,7 +74,7 @@ export default function SuccessResult({ paymentStatus }) {
                     borderRadius: '24px'
                 }}
             >
-                Về trang chủ
+                Trở về trang chủ
             </Button>
         </Box>
     );
