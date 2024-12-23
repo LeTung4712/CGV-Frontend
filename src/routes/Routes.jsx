@@ -6,6 +6,7 @@ import Ticket from "../pages/Movie/Ticket";
 import PaymentPage from "../pages/Payment/PaymentPage";
 //import Test from '../pages/Home/test';
 import Login from "../pages/Auth/Login/Login"
+import Logout from "../pages/Auth/logout/logout"
 import Register from "../pages/Auth/Register/Register";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
@@ -22,7 +23,9 @@ export const routes = [
       { path: ROUTE.TICKET, element: <Ticket /> },
       { path: ROUTE.LOGIN, element: <Login/>},
       { path: ROUTE.REGISTER, element: <Register/>},
-      { path: ROUTE.AUTH_PAYMENT, element: <PaymentPage />}
+      { path: ROUTE.AUTH_PAYMENT, element: <PaymentPage />},
+      { path:ROUTE.LOGOUT,element: <Logout/>}
+
     ],
   },
   {
