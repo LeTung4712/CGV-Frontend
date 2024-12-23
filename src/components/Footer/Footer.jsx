@@ -22,7 +22,7 @@ import cineF from "../../img/3.png";
 import cineL from "../../img/4.png";
 import cineS from "../../img/2.png";
 import suit from "../../img/12.png";
-import cgvFoot from "../../img/cgv-foot.png";
+import luxFoot from "../../img/lux-foot.png";
 
 const BrandImage = styled("img")(({ isMobile }) => ({
   height: "auto",
@@ -163,7 +163,7 @@ function Footer() {
                   color: "#fff",
                 }}
               >
-                CGV Việt Nam
+                LUX CINEMA Việt Nam
               </Typography>
               <Stack spacing={1}>
                 <Link
@@ -298,7 +298,7 @@ function Footer() {
                   Giờ làm việc: 8:00 - 22:00 (Tất cả các ngày bao gồm cả ngày Lễ
                   Tết)
                 </Typography>
-                <Typography>Email hỗ trợ: hoidap@cgv.vn</Typography>
+                <Typography>Email hỗ trợ: hoidap@lux.vn</Typography>
               </Stack>
             </Grid>
           </Grid>
@@ -314,17 +314,16 @@ function Footer() {
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={3}>
                 <img
-                  src={cgvFoot}
-                  alt="cgv footer logo"
+                  src={luxFoot}
+                  alt="lux footer logo"
                   style={{
                     maxWidth: "100%",
-                    filter: "brightness(0) invert(1)",
                   }}
                 />
               </Grid>
               <Grid item xs={12} md={9}>
                 <Typography variant="h6" gutterBottom sx={{ color: "#fff" }}>
-                  CÔNG TY TNHH CJ CGV VIETNAM
+                  CÔNG TY TNHH LUX CINEMA VIETNAM
                 </Typography>
                 <Typography variant="body2" paragraph sx={{ color: "#999" }}>
                   Giấy CNĐKDN: 0303675393, đăng ký lần đầu ngày 31/7/2008, đăng
@@ -332,14 +331,13 @@ function Footer() {
                   phố Hồ Chí Minh.
                 </Typography>
                 <Typography variant="body2" paragraph sx={{ color: "#999" }}>
-                  Địa Chỉ: Tầng 2, Rivera Park Saigon - Số 7/28 Thành Thái,
-                  P.14, Q.10, TPHCM.
+                  Địa Chỉ: Tầng 2, 123 Nguyễn Văn Cừ, P.4, Q.5, TPHCM.
                 </Typography>
                 <Typography variant="body2" sx={{ color: "#999" }}>
                   Hotline: 1900 6017
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 2, color: "#999" }}>
-                  COPYRIGHT 2017 CJ CGV. All RIGHTS RESERVED.
+                  COPYRIGHT 2024 LUX CINEMA. All RIGHTS RESERVED.
                 </Typography>
               </Grid>
             </Grid>

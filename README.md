@@ -60,54 +60,7 @@ Link: https://movie-ticket-booking-app-2024.web.app
     ```js
     VITE_API_URL = 
     ```
-## Cấu Trúc Dự Án
 
-Dưới đây là cấu trúc thư mục của dự án:
-
-```
-my-react-app/
-│
-├── public/                   # Thư mục chứa các file tĩnh
-│   |
-│   └── favicon.ico           # Icon trang web
-│
-├── src/
-│   ├── api/                  # Thư mục chứa cấu hình API
-│   │   ├── apiClient.js        # File cấu hình client API
-│   │   └── userService.js      # Ví dụ file dịch vụ API cho user                      
-│   ├── assets/               # Thư mục chứa tài nguyên tĩnh (hình ảnh, font, v.v.)
-│   ├── components/           # Thư mục chứa các component tái sử dụng
-│   ├── constants/            # Thư mục chứa các hằng số sử dụng trong ứng dụng
-│   │   └── routes.js           # File chứa các định nghĩa endpoint api
-│   ├── pages/                # Thư mục chứa các trang (pages) của ứng dụng
-│   │   ├── Home/               # Thư mục chứa trang home 
-│   │   │   ├── Home.jsx            # Ví dụ trang chính cho người dùng
-│   │   │   └── Home.css            # css trang home
-│   │   └── Login/              # Thư mục chứa trang login
-│   │       ├── Login.jsx           # Ví dụ trang login
-│   │       └── Login.css           # css trang login
-│   ├── router/               # Thư mục chứa cấu hình router
-│   |   ├── AppRoute.jsx        # cấu hình quyền truy cập router
-│   │   ├── PrivateRoute.jsx        # điều hứơng router yêu cầu login
-│   │   ├── PublicRoute.jsx         # điều hứơng router không yêu cầu login
-│   │   └── Routes.jsx          # Định nghĩa các route
-│   ├── store/                # Thư mục chứa Redux store (nếu có)
-│   │   └── index.js            # File cấu hình store
-│   ├── utils/                # Thư mục chứa các hàm tiện ích
-│   │   └── index.js            # File chứa các hàm tiện ích
-│   ├── App.jsx               # Component gốc của ứng dụng
-|   ├── App.css               # css base
-|   ├── index.css             # css
-│   └── main.jsx              # Entry point của ứng dụng
-│
-├── index.html                # File HTML chính
-├── .env                      # File chứa các biến môi trường
-├── .gitignore                # File để chỉ định các file không cần theo dõi trong Git
-├── package.json              # File cấu hình gói NPM
-├── vite.config.js            # File cấu hình Vite (nếu sử dụng Vite)
-└── README.md                 # Tài liệu mô tả dự án
-
-```
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
