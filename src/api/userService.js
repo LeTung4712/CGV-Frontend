@@ -5,7 +5,7 @@ const PREFIX = '';
 // API đăng nhập
 export const loginUser = async (email, password) => {
   try {
-    const response = await apiClient.post(`${PREFIX}/login`, {
+    const response = await apiClient.post(`${PREFIX}/customers/login`, {
       email,
       password,
     });
@@ -28,7 +28,7 @@ export const loginUser = async (email, password) => {
 //API đăng kí
 export const registerUser = async (userData) => {
     try {
-      const response = await apiClient.post(`${PREFIX}/register`, userData);
+      const response = await apiClient.post(`${PREFIX}/customers/register`, userData);
       return response.data; // Trả về dữ liệu từ API
     } catch (error) {
       throw new Error(error.response?.data?.message || "Đã xảy ra lỗi khi đăng ký");
