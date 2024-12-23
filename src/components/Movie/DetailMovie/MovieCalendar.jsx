@@ -94,6 +94,7 @@ function MovieCalendar({ selectedDate, onDateSelect }) {
         <DateCalendar
           value={selectedDate}
           onChange={onDateSelect}
+          minDate={dayjs()}
           sx={styles.calendar}
         />
       </LocalizationProvider>

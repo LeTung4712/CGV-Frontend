@@ -74,12 +74,22 @@ export default function Home() {
       >
         <BannerSlider />
 
-        {!isLoading && movies.length > 0 && <MovieSelection movies={movies} />}
-
-        <EventSection />
-        <PromotionCard />
+        {isLoading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : movies.length > 0 ? (
+          <>
+            <MovieSelection movies={movies} />
+            <EventSection />
+            <PromotionCard />
+          </>
+        ) : (
+          <Box sx={{ textAlign: 'center', py: 4 }}>
+            <Typography>Không có phim nào.</Typography>
+          </Box>
+        )}
       </Container>
-
       <PopcornAnimation />
     </Box>
   );

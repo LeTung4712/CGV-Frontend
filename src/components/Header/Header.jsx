@@ -29,7 +29,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import logo from '../../assets/images/cgvlogo.png';
+import logo from '../../assets/images/logo1.png';
 import { useLocation } from '../../contexts/LocationContext';
 
 const navigation = {
@@ -145,9 +145,9 @@ function Header() {
 
   useEffect(() => {
     const savedLocation = localStorage.getItem('location');
-    if (!savedLocation) {
+    //if (!savedLocation) {
       setOpenLocationDialog(true);
-    }
+    //}
   }, []);
 
   const handleLocationChange = (event) => {
@@ -217,7 +217,7 @@ function Header() {
               {/* Logo */}
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <Link to="/">
-                  <img src={logo} alt="Logo" style={{ height: '45px' }} />
+                  <img src={logo} alt="Logo" style={{ height: '45px', marginLeft: '15px' }} />
                 </Link>
               </Box>
 
