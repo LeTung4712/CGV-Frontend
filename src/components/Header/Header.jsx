@@ -137,7 +137,7 @@ const styles = {
 
 function Header() {
   const { location, updateLocation } = useLocation();
-  const user = JSON.parse(localStorage.getItem("token"));
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState('');
@@ -363,7 +363,7 @@ function Header() {
                       to="/profile"
                       sx={{ color: 'text.primary' }}
                     >
-                      XIN CHÀO, {user.user.name}
+                      XIN CHÀO, {user.name}
                     </Button>
                     <Button
                       onClick={logoutOnclick}
