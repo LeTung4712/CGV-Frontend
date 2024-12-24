@@ -35,23 +35,23 @@ function PaymentPage() {
     searchParams.get("vnp_ResponseCode") ||
     searchParams.get("status");
 
-  // Thêm useEffect để detect navigation từ sandbox
-  useEffect(() => {
-    if (
-      document.referrer.includes("momo") ||
-      document.referrer.includes("vnpay") ||
-      document.referrer.includes("zalopay")
-    ) {
-      setIsFromSandbox(true);
-    }
-  }, []);
+  // // Thêm useEffect để detect navigation từ sandbox
+  // useEffect(() => {
+  //   if (
+  //     document.referrer.includes("momo") ||
+  //     document.referrer.includes("vnpay") ||
+  //     document.referrer.includes("zalopay")
+  //   ) {
+  //     setIsFromSandbox(true);
+  //   }
+  // }, []);
 
   useEffect(() => {
-    // Nếu đang quay lại từ sandbox, redirect về /ticket
-    if (isFromSandbox) {
-      navigate("/ticket", { replace: true });
-      return;
-    }
+    // // Nếu đang quay lại từ sandbox, redirect về /ticket
+    // if (isFromSandbox) {
+    //   navigate("/ticket", { replace: true });
+    //   return;
+    // }
 
     // Xử lý kết quả thanh toán từ returnUrl callback
     if (isReturnUrl) {
@@ -189,18 +189,18 @@ function PaymentPage() {
     }
   }, [paymentData, navigate, searchParams, isReturnUrl, isFromSandbox]);
 
-  // Thêm useEffect mới để handle browser back button
-  useEffect(() => {
-    const handlePopState = (event) => {
-      // Nếu người dùng bấm nút back của browser và không có payment data
-      if (!paymentData && !isReturnUrl) {
-        navigate("/ticket", { replace: true });
-      }
-    };
+  // // Thêm useEffect mới để handle browser back button
+  // useEffect(() => {
+  //   const handlePopState = (event) => {
+  //     // Nếu người dùng bấm nút back của browser và không có payment data
+  //     if (!paymentData && !isReturnUrl) {
+  //       navigate("/ticket", { replace: true });
+  //     }
+  //   };
 
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, [navigate, paymentData, isReturnUrl]);
+  //   window.addEventListener("popstate", handlePopState);
+  //   return () => window.removeEventListener("popstate", handlePopState);
+  // }, [navigate, paymentData, isReturnUrl]);
 
   // Hiển thị kết quả thanh toán
   if (paymentResult) {
