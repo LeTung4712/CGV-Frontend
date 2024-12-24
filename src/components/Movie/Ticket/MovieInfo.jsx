@@ -26,7 +26,7 @@ function MovieInfo({ movieData }) {
           <Box
             component="img"
             src={movieData.image_url}
-            alt={movieData.name}
+            alt={movieData.title}
             sx={{
               width: '100%',
               height: 'auto',
@@ -70,7 +70,10 @@ function MovieInfo({ movieData }) {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <CategoryIcon color="action" />
               <Typography variant="body2">
-                <strong>Thể loại:</strong> {movieData.genre}
+                <strong>Thể loại:</strong>{" "}
+                {Array.isArray(movieData.genre)
+                  ? movieData.genre.join(", ")
+                  : movieData.genre}
               </Typography>
             </Box>
 
@@ -84,7 +87,10 @@ function MovieInfo({ movieData }) {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <TheatersIcon color="action" />
               <Typography variant="body2">
-                <strong>Diễn viên:</strong> {movieData.actor}
+                <strong>Diễn viên:</strong>{" "}
+                {Array.isArray(movieData.actor)
+                  ? movieData.actor.join(", ")
+                  : movieData.actor}
               </Typography>
             </Box>
           </Box>
