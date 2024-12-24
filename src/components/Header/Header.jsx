@@ -57,7 +57,7 @@ const navigation = {
 
 const locations = [
   { value: 'Hà Nội', label: 'Hà Nội' },
-  { value: 'TP.HCMHCM', label: 'TP. Hồ Chí Minh' },
+  { value: 'TP.HCM', label: 'TP. Hồ Chí Minh' },
   { value: 'Đà Nẵng', label: 'Đà Nẵng' }
 ];
 
