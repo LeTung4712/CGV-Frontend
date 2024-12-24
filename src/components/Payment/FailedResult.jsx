@@ -35,9 +35,7 @@ export default function FailedResult({ paymentStatus }) {
                 <Typography sx={{ mb: 2, color: 'error.dark' }}>
                     Mã đơn hàng: {paymentStatus.orderId}
                 </Typography>
-                <Typography sx={{ color: 'error.dark', fontWeight: 500 }}>
-                    Lỗi: {paymentStatus.message}
-                </Typography>
+                
             </Box>
 
             <Button 
