@@ -474,7 +474,7 @@ function Header() {
                     fontWeight: 'bold'
                   }}
                 >
-                  CGV {location.label}
+                  LUX {location.label}
                 </Button>
               </Grid>
             ))}
