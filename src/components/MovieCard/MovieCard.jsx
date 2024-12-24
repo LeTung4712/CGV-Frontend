@@ -177,6 +177,7 @@ export default function MovieCard({ movie }) {
                   fontWeight: "bold",
                   color: "white",
                   backgroundColor: RATING_CONFIG[movie.rated]?.color,
+                  fontSize: { xs: "0.6rem", sm: "0.7rem", md: "0.8rem" },
                 }}
               >
                 {movie.rated}
