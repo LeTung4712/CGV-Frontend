@@ -1,51 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Alert } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 import { getBookingHistory } from "../../api/apiHistory";
 
-function decodeJWT(token) {
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split("")
-      .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-      .join("")
-  );
-  return JSON.parse(jsonPayload);
-}
+
 
 function BookingHistory() {
-  const [bookings, setBookings] = useState([]);
+  const [booking, setBooking] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchBookingHistory = async () => {
-      const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("data"));
 
-      if (!token) {
-        setError("Không tìm thấy token. Vui lòng đăng nhập lại.");
-        setLoading(false);
-        return;
-      }
+
 
       try {
-        const decodedToken = decodeJWT(token);
-        console.log("Decoded Token:", decodedToken);
-        const customerId = decodedToken.id?.trim();
-
-        console.log("Customer ID gửi lên API:", customerId);
-
-        if (!customerId) {
-          throw new Error("Token không hợp lệ. Không tìm thấy ID khách hàng.");
-        }
-
-        // Gọi API lấy lịch sử đặt vé
-        const response = await getBookingHistory(customerId);
-
-        
+        console.log("user",user)
+        const response = await getBookingHistory(user.id);
         console.log("Dữ liệu từ API:", response);
-        setBookings(Array.isArray(response) ? response : []);
+        if (Array.isArray(response.data)) {
+          setBooking(response.data);
+        } else {
+          console.warn("Dữ liệu trả về không phải mảng:", response);
+        }
+        console.log("booking",booking)
       } catch (err) {
         console.error("Error fetching booking history:", err.message || err);
         setError("Không thể tải lịch sử đặt vé. Vui lòng thử lại sau.");
@@ -76,7 +67,7 @@ function BookingHistory() {
     );
   }
 
-  if (bookings.length === 0) {
+  if (booking.length === 0) {
     return (
       <Container sx={{ marginTop: "50px" }}>
         <Typography variant="h6" sx={{ textAlign: "center" }}>
@@ -85,11 +76,12 @@ function BookingHistory() {
       </Container>
     );
   }
+  
 
   return (
     <Container sx={{ marginTop: "50px" }}>
       <Typography variant="h4" gutterBottom>
-        Lịch Sử Đặt Vé
+        Chi Tiết Lịch Sử Đặt Vé
       </Typography>
       <TableContainer component={Paper}>
         <Table>
@@ -100,22 +92,28 @@ function BookingHistory() {
               <TableCell><b>Ghế</b></TableCell>
               <TableCell><b>Giá</b></TableCell>
               <TableCell><b>Thời gian chiếu</b></TableCell>
-              <TableCell><b>Trạng thái</b></TableCell>
+              <TableCell><b>Ngày đặt vé</b></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {bookings.map((booking, index) => (
+            {booking.map((item, index) => (
               <TableRow key={index}>
-                <TableCell>{booking.movie_title || "N/A"}</TableCell>
-                <TableCell>{booking.cinema_name || "N/A"}</TableCell>
-                <TableCell>{booking.seat_number || "N/A"}</TableCell>
-                <TableCell>{(booking.price || 0).toLocaleString("vi-VN")} đ</TableCell>
+                <TableCell>{item.showtime_id?.movie_id?.title || "N/A"}</TableCell>
+                <TableCell>{item.showtime_id?.hall_id?.cinema_id?.name || "N/A"}</TableCell>
                 <TableCell>
-                  {booking.start_time
-                    ? `${new Date(booking.start_time).toLocaleString("vi-VN")} - ${new Date(booking.end_time).toLocaleString("vi-VN")}`
+                  {item.seat_ids
+                    ? item.seat_ids.map((seat) => seat.seatNumber).join(", ")
                     : "N/A"}
                 </TableCell>
-                <TableCell>{booking.ticket_status || "N/A"}</TableCell>
+                <TableCell>{(item.price || 0).toLocaleString("vi-VN")} đ</TableCell>
+                <TableCell>
+                  {item.showtime_id?.start_time
+                    ? `${new Date(item.showtime_id.start_time).toLocaleString(
+                        "vi-VN"
+                      )} - ${new Date(item.showtime_id.end_time).toLocaleString("vi-VN")}`
+                    : "N/A"}
+                </TableCell>
+                <TableCell>{new Date(item.booking_date).toLocaleString("vi-VN")}</TableCell>
               </TableRow>
             ))}
           </TableBody>

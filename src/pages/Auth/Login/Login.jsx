@@ -18,7 +18,7 @@ export default function LoginPage() {
     try {
        const response = await loginUser(email, password);
 
-       localStorage.setItem("token", response.token.token); // Lưu token JWT
+       localStorage.setItem("data", JSON.stringify(response.token.data)); // Lưu token JWT
       localStorage.setItem("user", JSON.stringify({ name: response.token.customer_name }));
       navigate("/");
     } catch (err) {

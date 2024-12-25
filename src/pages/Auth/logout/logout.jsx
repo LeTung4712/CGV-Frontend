@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 function Logout() {
   useEffect(() => {
     // Xóa dữ liệu khỏi localStorage
-    localStorage.removeItem("token");
+    localStorage.removeItem("data");
     localStorage.removeItem("user");
 
     // Chuyển hướng sau 5 giây
