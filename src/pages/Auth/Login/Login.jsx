@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Container, TextField, Button, Typography, Alert } from "@mui/material";
+import {
+  Box,
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../../api/userService";
 
@@ -16,10 +23,8 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-       const response = await loginUser(email, password);
-
-       localStorage.setItem("data", JSON.stringify(response.token.data)); // Lưu token JWT
-      localStorage.setItem("user", JSON.stringify({ name: response.token.customer_name }));
+      const response = await loginUser(email, password);
+      localStorage.setItem("data", JSON.stringify(response.token.data)); // Lưu token JWT
       navigate("/");
     } catch (err) {
       setError(err.message); // Hiển thị thông báo lỗi nếu có
@@ -89,7 +94,10 @@ export default function LoginPage() {
 
           <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
             Chưa có tài khoản?{" "}
-            <Link to="/register" style={{ textDecoration: "none", color: "#1976d2" }}>
+            <Link
+              to="/register"
+              style={{ textDecoration: "none", color: "#1976d2" }}
+            >
               Đăng ký
             </Link>
           </Typography>

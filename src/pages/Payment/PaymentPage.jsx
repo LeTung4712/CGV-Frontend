@@ -24,7 +24,7 @@ function PaymentPage() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const paymentData = location.state;
-  const id_customer = JSON.parse(localStorage.getItem("user")).idcustomer;
+  const id_customer = JSON.parse(localStorage.getItem("data")).id;
   const isReturnUrl =
     searchParams.get("errorCode") ||
     searchParams.get("vnp_ResponseCode") ||

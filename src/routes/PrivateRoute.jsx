@@ -4,7 +4,7 @@ import { ROUTE } from "../constants/routes";
 import { handleScrollToTop } from "./PublicRoute";
 
 const PrivateRoute = ({ children }) => {
-  const isLogin = localStorage.getItem("user");
+  const isLogin = localStorage.getItem("data");
   const navigate = useNavigate();
   const location = useLocation();
 
