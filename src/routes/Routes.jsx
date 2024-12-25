@@ -10,6 +10,7 @@ import Logout from "../pages/Auth/logout/logout"
 import Register from "../pages/Auth/Register/Register";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
+import History from "../pages/History/History"
 
 
 export const routes = [
@@ -24,7 +25,8 @@ export const routes = [
       { path: ROUTE.LOGIN, element: <Login/>},
       { path: ROUTE.REGISTER, element: <Register/>},
       { path: ROUTE.AUTH_PAYMENT, element: <PaymentPage />},
-      { path:ROUTE.LOGOUT,element: <Logout/>}
+      { path:ROUTE.LOGOUT,element: <Logout/>},
+      { path:ROUTE.HISTORY, element: <History/>}
 
     ],
   },

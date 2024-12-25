@@ -7,7 +7,7 @@ export const ROUTE = {
     PROFILE: '/profile',
     GENERAL: '/profile/general',
     CHANGE_PROFILE: '/profile/change-profile',
-    HISTORY: '/profile/history',
+    HISTORY: '/history',
     MOVIE_NOW_SHOWING: '/movies/now-showing',
     MOVIE_COMING_SOON: '/movies/coming-soon',
     MOVIE_DETAIL: '/movie/:title',
