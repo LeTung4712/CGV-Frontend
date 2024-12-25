@@ -24,35 +24,13 @@ function PaymentPage() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const paymentData = location.state;
-  const customerInfo = {
-    idcustomer: "6745e15e6ed1ebf9126196e2",
-    name: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    phone: "0909090909",
-  };
+  const id_customer = JSON.parse(localStorage.getItem("data")).id;
   const isReturnUrl =
     searchParams.get("errorCode") ||
     searchParams.get("vnp_ResponseCode") ||
     searchParams.get("status");
 
-  // // Thêm useEffect để detect navigation từ sandbox
-  // useEffect(() => {
-  //   if (
-  //     document.referrer.includes("momo") ||
-  //     document.referrer.includes("vnpay") ||
-  //     document.referrer.includes("zalopay")
-  //   ) {
-  //     setIsFromSandbox(true);
-  //   }
-  // }, []);
-
   useEffect(() => {
-    // // Nếu đang quay lại từ sandbox, redirect về /ticket
-    // if (isFromSandbox) {
-    //   navigate("/ticket", { replace: true });
-    //   return;
-    // }
-
     // Xử lý kết quả thanh toán từ returnUrl callback
     if (isReturnUrl) {
       const processPaymentResult = () => {
@@ -129,7 +107,7 @@ function PaymentPage() {
             amount: paymentData.totalAmount,
             paymentMethod: paymentData.selectedPaymentMethod,
             returnUrl: `${window.location.origin}/payment`,
-            idcustomer: customerInfo.idcustomer,
+            idcustomer: id_customer,
             idshowtime: paymentData.showtimeInfo.idshowtime,
             seatsByType: paymentData.seatsByType,
           };
@@ -188,19 +166,6 @@ function PaymentPage() {
       navigate("/ticket", { replace: true });
     }
   }, [paymentData, navigate, searchParams, isReturnUrl, isFromSandbox]);
-
-  // // Thêm useEffect mới để handle browser back button
-  // useEffect(() => {
-  //   const handlePopState = (event) => {
-  //     // Nếu người dùng bấm nút back của browser và không có payment data
-  //     if (!paymentData && !isReturnUrl) {
-  //       navigate("/ticket", { replace: true });
-  //     }
-  //   };
-
-  //   window.addEventListener("popstate", handlePopState);
-  //   return () => window.removeEventListener("popstate", handlePopState);
-  // }, [navigate, paymentData, isReturnUrl]);
 
   // Hiển thị kết quả thanh toán
   if (paymentResult) {

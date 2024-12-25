@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   AppBar,
@@ -24,115 +24,120 @@ import {
   DialogTitle,
   DialogContent,
   Grid,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import logo from '../../assets/images/logo1.png';
-import { useLocation } from '../../contexts/LocationContext';
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import HistoryIcon from "@mui/icons-material/History";
+import LogoutIcon from "@mui/icons-material/Logout";
+import logo from "../../assets/images/logo1.png";
+import { useLocation } from "../../contexts/LocationContext";
 
 const navigation = {
   main: [
     {
-      title: 'LỊCH CHIẾU',
+      title: "LỊCH CHIẾU",
       children: [
-        { title: 'LỊCH CHIẾU PHIM', path: '/movies/now-showing' },
-        { title: 'LỊCH CHIẾU RẠP', path: '/cinemas' }
-      ]
+        { title: "LỊCH CHIẾU PHIM", path: "/movies/now-showing" },
+        { title: "LỊCH CHIẾU RẠP", path: "/cinemas" },
+      ],
     },
-    { title: 'ĐỒ ĂN/COMBO', path: '/food-drinks' },
-    { title: 'KHUYẾN MÃI', path: '/promotions' },
+    { title: "ĐỒ ĂN/COMBO", path: "/food-drinks" },
+    { title: "KHUYẾN MÃI", path: "/promotions" },
     {
-      title: 'VỀ CHÚNG TÔI',
+      title: "VỀ CHÚNG TÔI",
       children: [
-        { title: 'HỆ THỐNG RẠP', path: '/theaters' },
-        { title: 'VỀ CHÚNG TÔI', path: '/about' },
-        { title: 'DỊCH VỤ QUẢNG CÁO', path: '/advertising' },
-        { title: 'TUYỂN DỤNG', path: '/recruitment' }
-      ]
-    }
-  ]
+        { title: "HỆ THỐNG RẠP", path: "/theaters" },
+        { title: "VỀ CHÚNG TÔI", path: "/about" },
+        { title: "DỊCH VỤ QUẢNG CÁO", path: "/advertising" },
+        { title: "TUYỂN DỤNG", path: "/recruitment" },
+      ],
+    },
+  ],
 };
 
 const locations = [
-  { value: 'Hà Nội', label: 'Hà Nội' },
-  { value: 'TP.HCM', label: 'TP. Hồ Chí Minh' },
-  { value: 'Đà Nẵng', label: 'Đà Nẵng' }
+  { value: "Hà Nội", label: "Hà Nội" },
+  { value: "TP.HCM", label: "TP. Hồ Chí Minh" },
+  { value: "Đà Nẵng", label: "Đà Nẵng" },
 ];
 
 const styles = {
   navigationButton: {
-    color: 'text.primary',
+    color: "text.primary",
     mx: 1,
-    fontSize: '15px',
+    fontSize: "15px",
     fontWeight: 600,
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-    letterSpacing: '0.5px',
-    '&:hover': { backgroundColor: 'transparent' },
-    py: 1.5
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    letterSpacing: "0.5px",
+    "&:hover": { backgroundColor: "transparent" },
+    py: 1.5,
   },
   select: (isMobile) => ({
-    backgroundColor: '#fdfcf0',
-    '& .MuiSelect-select': {
+    backgroundColor: "#fdfcf0",
+    "& .MuiSelect-select": {
       py: 1,
-      fontSize: isMobile ? '14px' : '16px',
+      fontSize: isMobile ? "14px" : "16px",
       fontWeight: 600,
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-      letterSpacing: '0.5px'
+      fontFamily:
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      letterSpacing: "0.5px",
     },
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#0066cc',
-      borderWidth: '2px',
-      borderRadius: '8px'
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#0066cc",
+      borderWidth: "2px",
+      borderRadius: "8px",
     },
-    '&:hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#0066cc'
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#0066cc",
     },
-    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#0066cc'
-    }
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#0066cc",
+    },
   }),
   menuItem: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-    fontSize: '16px',
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    fontSize: "16px",
     fontWeight: 600,
-    letterSpacing: '0.5px'
+    letterSpacing: "0.5px",
   },
   appBar: (trigger) => ({
     top: 0,
-    backgroundColor: '#fdfcf0',
+    backgroundColor: "#fdfcf0",
     boxShadow: trigger ? 1 : 0,
-    borderBottom: '1px solid',
-    borderColor: 'divider',
+    borderBottom: "1px solid",
+    borderColor: "divider",
     zIndex: (theme) => theme.zIndex.drawer + 1,
-    animation: trigger ? 'stuckMoveDown 0.6s' : 'none',
-    position: 'relative',
-    '@keyframes stuckMoveDown': {
-      '0%': {
-        transform: 'translateY(-100%)',
-        opacity: 0
+    animation: trigger ? "stuckMoveDown 0.6s" : "none",
+    position: "relative",
+    "@keyframes stuckMoveDown": {
+      "0%": {
+        transform: "translateY(-100%)",
+        opacity: 0,
       },
-      '100%': {
-        transform: 'translateY(0)',
-        opacity: 1
-      }
+      "100%": {
+        transform: "translateY(0)",
+        opacity: 1,
+      },
     },
-    '& .MuiToolbar-root': {
-      minHeight: { xs: '60px', sm: '70px' },
-      py: { xs: 0.5, sm: 1 }
-    }
+    "& .MuiToolbar-root": {
+      minHeight: { xs: "60px", sm: "70px" },
+      py: { xs: 0.5, sm: 1 },
+    },
   }),
   loginButton: {
-    backgroundColor: '#0066cc',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#0052a3'
+    backgroundColor: "#0066cc",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#0052a3",
     },
-    borderRadius: '8px',
+    borderRadius: "8px",
     px: 3,
-    py: 1.5
-  }
+    py: 1.5,
+  },
 };
 
 function Header() {
@@ -140,19 +145,20 @@ function Header() {
   const user = JSON.parse(localStorage.getItem("data"));
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openSubmenu, setOpenSubmenu] = useState('');
+  const [openSubmenu, setOpenSubmenu] = useState("");
   const [openLocationDialog, setOpenLocationDialog] = useState(false);
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
 
   useEffect(() => {
-    const savedLocation = localStorage.getItem('location');
-    if (window.location.pathname === '/') {
+    const savedLocation = localStorage.getItem("location");
+    if (window.location.pathname === "/") {
       setOpenLocationDialog(true);
     }
   }, []);
 
   const handleLocationChange = (event) => {
     const newLocation = event.target.value;
-    if (locations.some(loc => loc.value === newLocation)) {
+    if (locations.some((loc) => loc.value === newLocation)) {
       updateLocation(newLocation);
     }
   };
@@ -173,12 +179,20 @@ function Header() {
   };
 
   const handleSubmenuClick = (title) => {
-    setOpenSubmenu(openSubmenu === title ? '' : title);
+    setOpenSubmenu(openSubmenu === title ? "" : title);
   };
 
   const logoutOnclick = () => {
     localStorage.removeItem("token");
     navigate("/logout");
+  };
+
+  const handleOpenMobileMenu = (event) => {
+    setMobileMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseMobileMenu = () => {
+    setMobileMenuAnchor(null);
   };
 
   // Location Selector Component
@@ -202,60 +216,59 @@ function Header() {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar 
-          position="sticky"
-          color="default"
-          sx={styles.appBar(trigger)}
-        >
+        <AppBar position="sticky" color="default" sx={styles.appBar(trigger)}>
           <Container maxWidth="xl">
-            <Toolbar 
-              disableGutters 
-              sx={{ 
-                minHeight: { xs: '56px', sm: '64px' },
+            <Toolbar
+              disableGutters
+              sx={{
+                minHeight: { xs: "56px", sm: "64px" },
               }}
             >
               {/* Logo */}
-              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <Link to="/">
-                  <img src={logo} alt="Logo" style={{ height: '45px', marginLeft: '15px' }} />
+                  <img
+                    src={logo}
+                    alt="Logo"
+                    style={{ height: "45px", marginLeft: "15px" }}
+                  />
                 </Link>
               </Box>
 
               {/* Desktop Menu - Điều chỉnh justifyContent thành flex-start */}
-              <Box sx={{ 
-                flexGrow: 1, 
-                display: { xs: 'none', md: 'flex' },
-                justifyContent: 'flex-start',
-                ml: 4 // Thêm margin left để tạo khoảng cách với logo
-              }}>
-                {navigation.main.map((item) => (
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: { xs: "none", md: "flex" },
+                  justifyContent: "flex-start",
+                  ml: 4, // Thêm margin left để tạo khoảng cách với logo
+                }}
+              >
+                {navigation.main.map((item) =>
                   item.children ? (
                     <Box
                       key={item.title}
-                      sx={{ 
-                        position: 'relative',
-                        '&:hover > .MuiBox-root': { // Thay đổi selector
-                          display: 'block'
+                      sx={{
+                        position: "relative",
+                        "&:hover > .MuiBox-root": {
+                          // Thay đổi selector
+                          display: "block",
                         },
-                        mx: 1
+                        mx: 1,
                       }}
                     >
-                      <Button
-                        sx={styles.navigationButton}
-                      >
-                        {item.title}
-                      </Button>
+                      <Button sx={styles.navigationButton}>{item.title}</Button>
                       {/* Thay Menu bằng Box cho dropdown */}
                       <Box
                         sx={{
-                          display: 'none',
-                          position: 'absolute',
-                          top: '100%',
+                          display: "none",
+                          position: "absolute",
+                          top: "100%",
                           left: 0,
-                          minWidth: '200px',
-                          backgroundColor: '#fdfcf0',
-                          boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                          zIndex: 1000
+                          minWidth: "200px",
+                          backgroundColor: "#fdfcf0",
+                          boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                          zIndex: 1000,
                         }}
                       >
                         {item.children.map((child) => (
@@ -265,13 +278,13 @@ function Header() {
                             to={child.path}
                             fullWidth
                             sx={{
-                              justifyContent: 'flex-start',
-                              padding: '8px 16px',
-                              textAlign: 'left',
-                              color: 'text.primary',
-                              '&:hover': { 
-                                backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                              }
+                              justifyContent: "flex-start",
+                              padding: "8px 16px",
+                              textAlign: "left",
+                              color: "text.primary",
+                              "&:hover": {
+                                backgroundColor: "rgba(0, 0, 0, 0.04)",
+                              },
                             }}
                           >
                             {child.title}
@@ -289,85 +302,126 @@ function Header() {
                       {item.title}
                     </Button>
                   )
-                ))}
+                )}
               </Box>
 
               {/* Mobile Menu */}
-              <Box sx={{ 
-                display: { xs: 'flex', md: 'none' },
-                alignItems: 'center',
-                flexGrow: 1 
-              }}>
+              <Box
+                sx={{
+                  display: { xs: "flex", md: "none" },
+                  alignItems: "center",
+                  flexGrow: 1,
+                }}
+              >
                 {/* Logo */}
                 <Link to="/">
-                  <img src={logo} alt="Logo" style={{ height: '35px' }} />
+                  <img src={logo} alt="Logo" style={{ height: "35px" }} />
                 </Link>
-                
                 <Box sx={{ flexGrow: 1 }} /> {/* Spacer */}
-                
                 {/* Location Selector */}
                 <LocationSelector isMobile />
-                
                 {/* Login/Register cho Mobile */}
                 {!user ? (
                   <IconButton
                     component={Link}
                     to="/login"
-                    sx={{ color: 'text.primary' }}
+                    sx={{ color: "text.primary" }}
                   >
                     <PersonOutlineIcon />
                   </IconButton>
                 ) : (
-                  <IconButton
-                    onClick={logoutOnclick}
-                    sx={{ color: 'text.primary' }}
-                  >
-                    <PersonOutlineIcon />
-                  </IconButton>
+                  <>
+                    <IconButton
+                      onClick={handleOpenMobileMenu}
+                      sx={{ color: "text.primary" }}
+                    >
+                      <PersonOutlineIcon />
+                    </IconButton>
+                    <Menu
+                      anchorEl={mobileMenuAnchor}
+                      open={Boolean(mobileMenuAnchor)}
+                      onClose={handleCloseMobileMenu}
+                      PaperProps={{
+                        sx: {
+                          mt: 1.5,
+                          backgroundColor: "#fdfcf0",
+                          "& .MuiMenuItem-root": {
+                            typography: "body2",
+                            fontSize: "14px",
+                            fontWeight: 600,
+                          },
+                        },
+                      }}
+                      transformOrigin={{ horizontal: "right", vertical: "top" }}
+                      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                    >
+                      <MenuItem
+                        component={Link}
+                        to="/history"
+                        onClick={handleCloseMobileMenu}
+                        sx={{
+                          color: "text.primary",
+                          "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" },
+                          gap: 1.5
+                        }}
+                      >
+                        <HistoryIcon />
+                        Lịch sử mua vé
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleCloseMobileMenu();
+                          logoutOnclick();
+                        }}
+                        sx={{
+                          color: "text.primary",
+                          "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" },
+                          gap: 1.5
+                        }}
+                      >
+                        <LogoutIcon /> 
+                        Đăng xuất
+                      </MenuItem>
+                    </Menu>
+                  </>
                 )}
-                
                 {/* Menu Button */}
-                <IconButton
-                  onClick={handleDrawerToggle}
-                  sx={{ ml: 1 }}
-                >
+                <IconButton onClick={handleDrawerToggle} sx={{ ml: 1 }}>
                   <MenuIcon />
                 </IconButton>
               </Box>
 
               {/* Login/Register Button và Location Selector cho Desktop */}
-              <Box sx={{ 
-                flexShrink: 0,
-                display: { xs: 'none', md: 'flex' }, // Ẩn trên mobile
-                alignItems: 'center'
-              }}>
+              <Box
+                sx={{
+                  flexShrink: 0,
+                  display: { xs: "none", md: "flex" }, // Ẩn trên mobile
+                  alignItems: "center",
+                }}
+              >
                 <LocationSelector />
 
                 {/* Login/Register buttons */}
                 {!user ? (
-                  <Button
-                    component={Link}
-                    to="/login"
-                    sx={styles.loginButton}
-                  >
+                  <Button component={Link} to="/login" sx={styles.loginButton}>
                     ĐĂNG NHẬP/ĐĂNG KÝ
                   </Button>
                 ) : (
-                  <Stack 
-                    direction="row" 
+                  <Stack
+                    direction="row"
                     spacing={1}
-                    sx={{ display: { xs: 'none', md: 'flex' } }} // Ẩn trên mobile
+                    sx={{ display: { xs: "none", md: "flex" } }} // Ẩn trên mobile
                   >
                     <Button
                       component={Link}
                       to="/history"
-                      sx={{ color: 'text.primary' }}
+                      sx={{ color: "text.primary" }}
                     >
                       XIN CHÀO, {user.name}
                     </Button>
                     <Button
                       onClick={logoutOnclick}
-                      sx={{ color: 'text.primary' }}
+                      sx={{ color: "text.primary" }}
                     >
                       THOÁT
                     </Button>
@@ -383,22 +437,28 @@ function Header() {
             open={mobileOpen}
             onClose={handleDrawerToggle}
             sx={{
-              display: { xs: 'block', md: 'none' },
-              '& .MuiDrawer-paper': { 
-                boxSizing: 'border-box', 
+              display: { xs: "block", md: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
                 width: 240,
-                backgroundColor: '#fdfcf0',
-                transition: 'transform 0.3s ease-in-out',
+                backgroundColor: "#fdfcf0",
+                transition: "transform 0.3s ease-in-out",
               },
             }}
           >
             <List sx={{ pt: 2 }}>
-              {navigation.main.map((item) => (
+              {navigation.main.map((item) =>
                 item.children ? (
                   <React.Fragment key={item.title}>
-                    <ListItemButton onClick={() => handleSubmenuClick(item.title)}>
+                    <ListItemButton
+                      onClick={() => handleSubmenuClick(item.title)}
+                    >
                       <ListItemText primary={item.title} />
-                      {openSubmenu === item.title ? <ExpandLess /> : <ExpandMore />}
+                      {openSubmenu === item.title ? (
+                        <ExpandLess />
+                      ) : (
+                        <ExpandMore />
+                      )}
                     </ListItemButton>
                     <Collapse in={openSubmenu === item.title} timeout="auto">
                       <List component="div" disablePadding>
@@ -426,7 +486,7 @@ function Header() {
                     <ListItemText primary={item.title} />
                   </ListItemButton>
                 )
-              ))}
+              )}
             </List>
           </Drawer>
         </AppBar>
@@ -438,18 +498,18 @@ function Header() {
         maxWidth="sm"
         fullWidth
         sx={{
-          '& .MuiDialog-paper': {
-            backgroundColor: '#fdfcf0',
-            borderRadius: '13px'
-          }
+          "& .MuiDialog-paper": {
+            backgroundColor: "#fdfcf0",
+            borderRadius: "13px",
+          },
         }}
       >
-        <DialogTitle 
-          sx={{ 
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: '1.5rem',
-            color: '#333'
+        <DialogTitle
+          sx={{
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: "1.5rem",
+            color: "#333",
           }}
         >
           Chào mừng quý khách đến với LUX CINEMA
@@ -464,14 +524,14 @@ function Header() {
                   onClick={() => handleLocationSelect(location.value)}
                   sx={{
                     py: 2,
-                    borderColor: '#0066cc',
-                    color: '#0066cc',
-                    '&:hover': {
-                      borderColor: '#0066cc',
-                      backgroundColor: 'rgba(0, 102, 204, 0.1)',
+                    borderColor: "#0066cc",
+                    color: "#0066cc",
+                    "&:hover": {
+                      borderColor: "#0066cc",
+                      backgroundColor: "rgba(0, 102, 204, 0.1)",
                     },
-                    fontSize: '1.1rem',
-                    fontWeight: 'bold'
+                    fontSize: "1.1rem",
+                    fontWeight: "bold",
                   }}
                 >
                   LUX {location.label}
