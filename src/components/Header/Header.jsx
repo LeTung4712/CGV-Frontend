@@ -137,7 +137,7 @@ const styles = {
 
 function Header() {
   const { location, updateLocation } = useLocation();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("data"));
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState('');
