@@ -360,7 +360,7 @@ function Header() {
                   >
                     <Button
                       component={Link}
-                      to="/profile"
+                      to="/history"
                       sx={{ color: 'text.primary' }}
                     >
                       XIN CHÀO, {user.name}
